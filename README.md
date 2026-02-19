@@ -15,6 +15,6 @@ I build practical software with a focus on clean UX, strong engineering, and per
 
 ## Contact
 
-- Email: `kennethk.dev@gmail.com`
-- LinkedIn: `linkedin.com/in/kenneth-koon-608586300`
-- GitHub: `github.com/maegiko`
+- Email: [kennethk.dev@gmail.com](mailto:kennethk.dev@gmail.com)
+- LinkedIn: [linkedin.com/in/kenneth-koon-608586300](https://www.linkedin.com/in/kenneth-koon-608586300/)
+- GitHub: [github.com/maegiko](https://github.com/maegiko)
