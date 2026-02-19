@@ -1,0 +1,618 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="en" class="preload">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hey, it's Ken!</title>
+    <meta
+      name="description"
+      content="Ken's portfolio — projects, experience, and contact."
+    />
+    <link rel="icon" href="images/maegika-heart.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <div class="bg"></div>
+
+    <div class="shell">
+      <!-- LEFT CARD -->
+      <aside class="card side">
+        <div class="sideStack">
+          <!-- HERO -->
+          <div class="sideTile sideHero">
+            <div class="avatar avatarLarge" aria-hidden="true">
+              <!-- Replace with an <img> if you want -->
+              <img src="./images/me.jpeg" alt="Portrait of Kenneth Koon" />
+            </div>
+            <h1 class="sideName">Kenneth Koon</h1>
+            <div class="sideRole">Computer Science @ UNSW</div>
+          </div>
+
+          <!-- CONTACTS -->
+          <div class="sideTile" aria-label="Contact info">
+            <div class="contactTile">
+              <div class="cIcon" aria-hidden="true">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 6.5V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M4 7L12 13L20 7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="cBody">
+                <div class="cK">EMAIL</div>
+                <a class="cV" href="mailto:ken@example.com"
+                  >kennethk.dev@gmail.com</a
+                >
+              </div>
+            </div>
+
+            <div class="contactTile">
+              <div class="cIcon" aria-hidden="true">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22S19 16.5 19 10.5C19 6.35786 15.866 3 12 3C8.13401 3 5 6.35786 5 10.5C5 16.5 12 22 12 22Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12 13.5C13.3807 13.5 14.5 12.3807 14.5 11C14.5 9.61929 13.3807 8.5 12 8.5C10.6193 8.5 9.5 9.61929 9.5 11C9.5 12.3807 10.6193 13.5 12 13.5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+              <div class="cBody">
+                <div class="cK">LOCATION</div>
+                <div class="cV">Sydney, Australia</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SOCIAL -->
+          <div class="socialRow" aria-label="Social links">
+            <a
+              class="socialBtn"
+              href="https://www.linkedin.com/in/kenneth-koon-608586300/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <!-- Official LinkedIn glyph -->
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="currentColor"
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.476-.9 1.637-1.85 3.369-1.85 3.6 0 4.262 2.37 4.262 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zM6.956 20.452H3.713V9h3.243v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"
+                />
+              </svg>
+            </a>
+
+            <a
+              class="socialBtn"
+              href="https://github.com/maegiko"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2C6.477 2 2 6.561 2 12.187C2 16.69 4.865 20.507 8.839 21.854C9.339 21.949 9.521 21.632 9.521 21.36C9.521 21.115 9.512 20.473 9.507 19.62C6.726 20.241 6.14 18.419 6.14 18.419C5.686 17.22 5.031 16.901 5.031 16.901C4.121 16.26 5.1 16.273 5.1 16.273C6.104 16.345 6.632 17.328 6.632 17.328C7.531 18.92 8.97 18.47 9.54 18.212C9.633 17.539 9.889 17.079 10.171 16.819C7.951 16.56 5.62 15.675 5.62 11.642C5.62 10.493 6.02 9.556 6.678 8.821C6.572 8.56 6.219 7.505 6.779 6.077C6.779 6.077 7.645 5.792 9.51 7.097C10.332 6.86 11.211 6.741 12.09 6.737C12.969 6.741 13.848 6.86 14.671 7.097C16.535 5.792 17.399 6.077 17.399 6.077C17.961 7.505 17.607 8.56 17.501 8.821C18.16 9.556 18.558 10.493 18.558 11.642C18.558 15.686 16.223 16.557 13.996 16.812C14.35 17.132 14.666 17.767 14.666 18.741C14.666 20.136 14.653 21.255 14.653 21.36C14.653 21.634 14.833 21.954 15.341 21.853C19.316 20.505 22.18 16.689 22.18 12.187C22.18 6.561 17.703 2 12 2Z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="card main">
+        <header class="top">
+          <nav class="tabs" aria-label="Sections">
+            <button class="tab is-active" data-tab="about">About</button>
+            <button class="tab" data-tab="resume">Resume</button>
+            <button class="tab" data-tab="projects">Projects</button>
+            <button class="tab" data-tab="contact">Contact</button>
+          </nav>
+
+          <div class="topActions">
+            <button
+              class="btn subtle iconBtn"
+              id="themeToggle"
+              title="Switch to light"
+              aria-label="Switch to light"
+            >
+              <!-- Default dark => show moon -->
+              <svg
+                class="themeIcon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- ABOUT -->
+        <section class="pane is-active" id="about" aria-label="About section">
+          <h2 class="h2">About me</h2>
+          <p class="lead">
+            I build practical software with a focus on clean UX, solid
+            engineering, and performance. I’m currently studying Computer
+            Science at UNSW and shipping projects on the side.
+          </p>
+
+          <div class="grid2">
+            <div class="tile">
+              <h3 class="h3">What I do</h3>
+              <ul class="cards">
+                <li class="chipCard">
+                  <div class="chipIcon">⚡</div>
+                  <div>
+                    <div class="chipTitle">Frontend</div>
+                    <div class="chipText">
+                      Fast, crisp UI with sensible state and accessibility.
+                    </div>
+                  </div>
+                </li>
+                <li class="chipCard">
+                  <div class="chipIcon">🧠</div>
+                  <div>
+                    <div class="chipTitle">Backend</div>
+                    <div class="chipText">
+                      APIs, data models, auth, and clean service boundaries.
+                    </div>
+                  </div>
+                </li>
+                <li class="chipCard">
+                  <div class="chipIcon">✨</div>
+                  <div>
+                    <div class="chipTitle">Hint of flash</div>
+                    <div class="chipText">
+                      Subtle gradients, hover lift, and crisp typography.
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tile">
+              <h3 class="h3">Currently</h3>
+              <ul class="timeline">
+                <li>
+                  <span class="tDot"></span>
+                  <div>
+                    <div class="tTop">Learning</div>
+                    <div class="tText">
+                      Systems Design + OOP + DSA + Frontend + shipping more
+                      polished projects.
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <span class="tDot"></span>
+                  <div>
+                    <div class="tTop">Looking for</div>
+                    <div class="tText">
+                      Internships / junior roles where I can grow fast and
+                      contribute.
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESUME -->
+        <section class="pane" id="resume" aria-label="Resume section">
+          <h2 class="h2">Resume</h2>
+
+          <div class="resumeStack">
+            <!-- SKILLS (FIRST) -->
+            <div class="tile">
+              <h3 class="h3">Skills</h3>
+              <div class="tags">
+                <span class="tag">C</span>
+                <span class="tag">C#</span>
+                <span class="tag">Java</span>
+                <span class="tag">Javascript/TypeScript</span>
+                <span class="tag">Python</span>
+                <span class="tag">SQL</span>
+                <span class="tag">Git</span>
+              </div>
+            </div>
+            <!-- EDUCATION (SECOND) -->
+            <div class="tile">
+              <div class="resumeBlock">
+                <div class="resumeBlockHead">
+                  <div class="resumeIcon" aria-hidden="true">
+                    <!-- Book -->
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 19.5V6.5A2.5 2.5 0 0 1 6.5 4H20v15.5H6.5A2.5 2.5 0 0 0 4 22"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="resumeTitle">Education</h3>
+                </div>
+
+                <div class="timeline2" role="list">
+                  <div class="t2Item" role="listitem">
+                    <div class="t2Rail" aria-hidden="true">
+                      <span class="t2Dot"></span>
+                      <span class="t2Line"></span>
+                    </div>
+                    <div class="t2Card">
+                      <div class="t2Top">
+                        <div class="t2Role">
+                          Bachelor of Science (Computer Science)
+                        </div>
+
+                        <div class="t2Meta">UNSW</div>
+
+                        <div class="t2Meta">2024 — 2027</div>
+
+                        <div class="t2Meta">Grade: Distinction</div>
+                      </div>
+
+                      <div class="t2Tags">
+                        <span class="t2Tag">DSA</span>
+                        <span class="t2Tag">Systems Design / Architecture</span>
+                        <span class="t2Tag">Frontend</span>
+                        <span class="t2Tag">APIs</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="t2Item" role="listitem">
+                    <div class="t2Rail" aria-hidden="true">
+                      <span class="t2Dot"></span>
+                    </div>
+                    <div class="t2Card">
+                      <div class="t2Top">
+                        <div class="t2Role">Bachelor of Creative Arts</div>
+
+                        <div class="t2Meta">JMC Academy</div>
+
+                        <div class="t2Meta">Feb 2020 — Sep 2020</div>
+
+                        <div class="t2Meta">Cinematography / Film</div>
+                      </div>
+
+                      <div class="t2Tags">
+                        <span class="t2Tag">Cinematography</span>
+                        <span class="t2Tag">Production</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- EXPERIENCE (THIRD) -->
+            <div class="tile">
+              <div class="resumeBlock">
+                <div class="resumeBlockHead">
+                  <div class="resumeIcon" aria-hidden="true">
+                    <!-- Briefcase -->
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M4 8h16v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8Z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4 12h16"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="resumeTitle">Experience</h3>
+                </div>
+
+                <div class="timeline2" role="list">
+                  <div class="t2Item" role="listitem">
+                    <div class="t2Rail" aria-hidden="true">
+                      <span class="t2Dot"></span>
+                      <span class="t2Line"></span>
+                    </div>
+                    <div class="t2Card">
+                      <div class="t2Top">
+                        <div class="t2Role">Crew Member</div>
+                        <div class="t2Meta">Coles Group</div>
+                        <div class="t2Meta">Jul 2017 — Nov 2023</div>
+                      </div>
+
+                      <ul class="t2Bullets">
+                        <li>
+                          Delivered friendly, efficient customer service and
+                          resolved day-to-day issues quickly.
+                        </li>
+                        <li>
+                          Maintained dairy availability and rotation standards;
+                          supported waste reduction.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="t2Item" role="listitem">
+                    <div class="t2Rail" aria-hidden="true">
+                      <span class="t2Dot"></span>
+                      <span class="t2Line"></span>
+                    </div>
+                    <div class="t2Card">
+                      <div class="t2Top">
+                        <div class="t2Role">
+                          Camera Assistant & Production Runner
+                        </div>
+                        <div class="t2Meta">Freelance · Australia</div>
+                        <div class="t2Meta">2018 — 2023</div>
+                      </div>
+
+                      <ul class="t2Bullets">
+                        <li>
+                          Supported camera ops: setup, lens changes, gear
+                          checks, and on-set reliability.
+                        </li>
+                        <li>
+                          Coordinated logistics and runner tasks to keep
+                          production moving on schedule.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="t2Item" role="listitem">
+                    <div class="t2Rail" aria-hidden="true">
+                      <span class="t2Dot"></span>
+                    </div>
+                    <div class="t2Card">
+                      <div class="t2Top">
+                        <div class="t2Role">Freelance Photographer</div>
+                        <div class="t2Meta">Freelance · Australia</div>
+                        <div class="t2Meta">2017 — 2023</div>
+                      </div>
+
+                      <ul class="t2Bullets">
+                        <li>
+                          Shot and delivered client work across portraits/events
+                          with consistent quality.
+                        </li>
+                        <li>
+                          Handled editing/retouching workflow and on-time
+                          delivery.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="pane" id="projects">
+          <h2 class="h2">Projects</h2>
+
+          <div class="tile">
+            <div class="projectsTop">
+              <h3 class="h3">Projects</h3>
+
+              <div class="filters">
+                <button class="filter is-active" data-filter="all">All</button>
+                <button class="filter" data-filter="web">Web</button>
+                <button class="filter" data-filter="backend">Backend</button>
+                <button class="filter" data-filter="uni">Uni</button>
+              </div>
+            </div>
+
+            <div class="projectGrid">
+              <!-- paste project cards here -->
+              <div class="project" data-tags="backend">
+                <h4 class="projTitle">InventoryAndOrdersAPI</h4>
+                <div class="projLinks">
+                  <a
+                    class="link"
+                    href="https://github.com/maegiko/InventoryAndOrders"
+                    target="_blank"
+                    >GitHub</a
+                  >
+                </div>
+
+                <p class="projText">
+                  A RESTful API for managing products, orders, and stock
+                  reservation with secure authentication and transactional
+                  workflows.
+                </p>
+
+                <!-- Tech stack pills at the bottom -->
+                <div class="t2Tags">
+                  <span class="t2Tag">C#</span>
+                  <span class="t2Tag">.NET</span>
+                  <span class="t2Tag">FastEndpoints</span>
+                  <span class="t2Tag">SQLite</span>
+                  <span class="t2Tag">Dapper</span>
+                  <span class="t2Tag">REST API</span>
+                  <span class="t2Tag">JWT Auth</span>
+                </div>
+              </div>
+
+              <div class="project" data-tags="backend uni">
+                <h4 class="projTitle">Kahoot! Clone Backend API</h4>
+                <div class="projLinks"></div>
+                <p class="projText">
+                  Kahoot! Clone Backend with admin account registration, quiz
+                  creation and customisation allowing for game creation and
+                  lifecycle. Implemented a bonus feature for quiz creation using
+                  AI.
+                </p>
+
+                <div class="t2Tags">
+                  <span class="t2Tag">Typescript</span>
+                  <span class="t2Tag">Express.js</span>
+                  <span class="t2Tag">Jest</span>
+                  <span class="t2Tag">REST</span>
+                  <span class="t2Tag">CI/CD Pipelines</span>
+                </div>
+              </div>
+
+              <div class="project" data-tags="web uni">
+                <h4 class="projTitle">Lost Ark Task Tracker</h4>
+                <div class="projLinks">
+                  <a
+                    class="link"
+                    href="https://github.com/maegiko/lostark-task-tracker"
+                    target="_blank"
+                    >GitHub</a
+                  >
+                </div>
+                <p class="projText">
+                  Daily and Weekly checklist app for video game, Lost Ark.
+                  Includes table customisation for characters and tasks with
+                  checkboxes resetting synced to in-game time and persistent
+                  data using cookies.
+                </p>
+                <div class="t2Tags">
+                  <span class="t2Tag">Python</span>
+                  <span class="t2Tag">PyHTML</span>
+                  <span class="t2Tag">CSS</span>
+                  <span class="t2Tag">Flask</span>
+                  <span class="t2Tag">Javascript</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="pane" id="contact" aria-label="Contact section">
+          <h2 class="h2">Contact</h2>
+          <p class="lead">
+            If you want to chat about a role, a project, or collab ideas — send
+            a message.
+          </p>
+
+          <form action="https://formspree.io/f/xpqjjawr" method="POST" class="form" id="contactForm">
+            <div class="field">
+              <label for="name">Name</label>
+              <input
+                id="name"
+                name="name"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@email.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="msg">Message</label>
+              <textarea
+                id="msg"
+                name="msg"
+                rows="5"
+                placeholder="What’s up?"
+                required
+              ></textarea>
+            </div>
+
+            <button class="btn primary" type="submit">Send</button>
+            <p class="hint" id="formHint" aria-live="polite"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
