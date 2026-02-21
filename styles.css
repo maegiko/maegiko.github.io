@@ -1129,7 +1129,7 @@ body::after {
   height: calc(10px + env(safe-area-inset-bottom));
 }
 
-@media (max-width: 420px) {
+@media (max-width: 428px) {
   .tab {
     padding: 10px 10px;
     font-size: 11px;
