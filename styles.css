@@ -27,9 +27,9 @@
 
   --ring: 0 0 0 3px rgba(255, 255, 255, 0.18);
   color-scheme: dark;
-  --accent: #7dd3fc; /* soft sky blue */
-  --accent-strong: #38bdf8; /* stronger interaction */
-  --accent-glow: rgba(125, 211, 252, 0.35);
+  --accent: #fbbf24;
+--accent-strong: #f59e0b;
+--accent-glow: rgba(251, 191, 36, 0.35);
 }
 
 :root.light {
@@ -1138,9 +1138,16 @@ body::after {
   height: calc(10px + env(safe-area-inset-bottom));
 }
 
-@media (max-width: 428px) {
+@media (max-width: 431px) {
   .tab {
     padding: 10px 10px;
     font-size: 11px;
+  }
+}
+
+@media (max-width: 397px) {
+  .tab {
+    padding: 9px 9px;
+    font-size: 10px;
   }
 }
