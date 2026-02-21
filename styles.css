@@ -199,18 +199,8 @@ body {
 }
 .sideName {
   margin: 0;
-  font-size: 26px;
+  font-size: 31px;
   letter-spacing: -0.02em;
-}
-.sideRole {
-  margin: 10px auto 0;
-  width: fit-content;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--stroke2);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
-  font-size: 13px;
 }
 
 .contactTile {
@@ -405,7 +395,7 @@ body {
 
 .h2 {
   margin: 2px 0 10px;
-  font-size: 18px;
+  font-size: 30px;
   letter-spacing: -0.015em;
   position: relative;
 }
@@ -413,7 +403,7 @@ body {
 .h2::after {
   content: "";
   display: block;
-  width: 36px; /* line length */
+  width: 45px; /* line length */
   height: 4px; /* thickness */
   margin-top: 8px; /* gap from text */
   border-radius: 999px;
@@ -980,26 +970,37 @@ textarea:focus {
 }
 
 .sideRole {
+  margin: 10px auto 0;
+  width: fit-content;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke2);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sideRole {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
   background:
     radial-gradient(
       140% 140% at 30% 20%,
-      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.07),
       transparent 45%
     ),
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.06),
-      rgba(255, 255, 255, 0.015)
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.01)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.1);
 
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 2px 6px rgba(0, 0, 0, 0.25);
+    0 1px 6px rgba(0, 0, 0, 0.25);
 }
 
 .sideRole {
