@@ -328,6 +328,8 @@ body {
     border-color 0.15s ease;
 }
 .btn:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s ease;
   background: rgba(255, 255, 255, 0.06);
 }
 .btn:active {
@@ -1067,7 +1069,7 @@ textarea:focus {
 
 /* Hover effect */
 .sideHero:hover .avatar.avatarLarge {
-  transform: scale(0.96); /* slight zoom OUT */
+  transform: scale(1.05); /* slight zoom OUT */
 }
 
 /* --- One-time boot animation (only on initial load) --- */
