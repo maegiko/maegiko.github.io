@@ -1110,4 +1110,23 @@ html.loaded .card.main {
   }
 }
 
+@media (max-width: 980px) {
+  body::after {
+    content: "";
+    display: block;
+    height: calc(10px + env(safe-area-inset-bottom));
+  }
+} 
 
+.tDot {
+  animation: tDotBreathe 1.6s ease-in-out infinite;
+}
+
+@keyframes tDotBreathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+
+.t2Dot {
+  animation: tDotBreathe 1.6s ease-in-out infinite;
+}
