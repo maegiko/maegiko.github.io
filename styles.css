@@ -1348,3 +1348,10 @@ body::after {
   border-color: color-mix(in srgb, var(--accent) 45%, rgba(255, 255, 255, 0.1));
   color: var(--accent);
 }
+
+:root.light .btn.primary:hover {
+  transform: translateY(-1px) ease;
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.22),
+    0 4px 10px rgba(106, 106, 106, 0.32);
+}
