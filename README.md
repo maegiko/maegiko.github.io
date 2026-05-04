@@ -2,6 +2,8 @@
 
 Personal portfolio website for Kenneth Koon, a Computer Science student at UNSW based in Sydney, Australia 🇦🇺.
 
+[Link to Website](https://maegiko.github.io)
+
 ## About Me 🚀
 
 I build practical software with a focus on clean UX, strong engineering, and performance. I am currently studying Computer Science at UNSW and looking for internship and junior opportunities.
