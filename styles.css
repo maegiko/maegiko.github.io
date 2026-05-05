@@ -122,6 +122,8 @@ html.theme-crossfade body::before {
 }
 
 .shell {
+  position: relative;
+  z-index: 1;
   max-width: var(--max);
   margin: 28px auto;
   padding: 0 18px;
@@ -131,7 +133,16 @@ html.theme-crossfade body::before {
 }
 
 .bg {
-  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bgCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .card {
@@ -472,6 +483,9 @@ html.theme-crossfade body::before {
   html.theme-crossfade body::before {
     animation: none;
     opacity: 0;
+  }
+  .bgCanvas {
+    opacity: 0.55;
   }
 }
 

@@ -10,6 +10,7 @@
   });
 
   const themeToggle = document.getElementById("themeToggle");
+  const backgroundLayer = document.querySelector(".bg");
   const form = document.getElementById("contactForm");
   const hint = document.getElementById("formHint");
   const pageShell = document.querySelector(".shell");
@@ -313,7 +314,7 @@
     javascript: "jsLogo",
     "javascript/typescript": "jsLogo",
     "jwt auth": "shield",
-    "langchain": "neural",
+    langchain: "neural",
     crypto: "package",
     "highlight.js": "package",
     llm: "neural",
@@ -322,7 +323,7 @@
     "node.js": "hexagon",
     openai: "neural",
     prettier: "lint",
-    "stylelint": "lint",
+    stylelint: "lint",
     pyhtml: "squareCode",
     python: "pythonLogo",
     react: "atom",
@@ -390,6 +391,223 @@
 
   function enhanceTechPills(scope = document) {
     scope.querySelectorAll(".t2Tag, .tag").forEach(enhanceTechPill);
+  }
+
+  function setupStarfield() {
+    if (!backgroundLayer) return;
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.className = "bgCanvas";
+    canvas.setAttribute("aria-hidden", "true");
+    backgroundLayer.appendChild(canvas);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pointer = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      prevX: window.innerWidth / 2,
+      prevY: window.innerHeight / 2,
+      vx: 0,
+      vy: 0,
+      active: false,
+    };
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let stars = [];
+    let frameId = null;
+
+    function createStars() {
+      const area = width * height;
+      const count = Math.max(42, Math.min(110, Math.floor(area / 15000)));
+
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: 0,
+        vy: 0,
+        size: Math.random() * 1.8 + 0.8,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.00055 + 0.00025,
+        drift: Math.random() * 10 + 4,
+        depth: Math.random() * 0.7 + 0.3,
+        twinkle: Math.random() * 0.28 + 0.35,
+      }));
+    }
+
+    function resizeStarfield() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      createStars();
+    }
+
+    function drawFourPointStar(radius) {
+      ctx.beginPath();
+      ctx.moveTo(0, -radius);
+      ctx.lineTo(radius * 0.22, -radius * 0.22);
+      ctx.lineTo(radius, 0);
+      ctx.lineTo(radius * 0.22, radius * 0.22);
+      ctx.lineTo(0, radius);
+      ctx.lineTo(-radius * 0.22, radius * 0.22);
+      ctx.lineTo(-radius, 0);
+      ctx.lineTo(-radius * 0.22, -radius * 0.22);
+      ctx.closePath();
+    }
+
+    function drawStar(star, time) {
+      const driftX =
+        Math.sin(time * star.speed + star.phase) *
+        star.drift *
+        (0.5 + star.depth);
+      const driftY =
+        Math.cos(time * star.speed * 0.8 + star.phase) *
+        star.drift *
+        (0.5 + star.depth);
+      let x = star.x + driftX;
+      let y = star.y + driftY;
+
+      if (pointer.active && !reduceMotion.matches) {
+        const dx = x - pointer.x;
+        const dy = y - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const radius = 170;
+
+        if (distance < radius && distance > 0.01) {
+          const force = (1 - distance / radius) ** 2;
+          const strength = 1.8;
+
+          star.vx += pointer.vx * force * 0.015 * star.depth;
+          star.vy += pointer.vy * force * 0.015 * star.depth;
+        }
+      }
+
+      star.x += star.vx;
+      star.y += star.vy;
+
+      star.vx *= 0.96;
+      star.vy *= 0.96;
+
+      if (star.x < -20) star.x = width + 20;
+      if (star.x > width + 20) star.x = -20;
+      if (star.y < -20) star.y = height + 20;
+      if (star.y > height + 20) star.y = -20;
+
+      x = star.x + driftX;
+      y = star.y + driftY;
+
+      const isLight = root.classList.contains("light");
+      const alpha =
+        star.twinkle +
+        (reduceMotion.matches
+          ? 0
+          : Math.sin(time * 0.0016 + star.phase) * 0.18);
+      const color = isLight
+        ? `rgba(40, 40, 60, ${Math.max(0.18, alpha * 0.6)})`
+        : `rgba(255, 255, 255, ${Math.max(0.18, alpha)})`;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      ctx.scale(1, 1 + Math.sin(time * 0.002 + star.phase) * 0.05);
+
+      // base glow strength (ties into twinkle)
+      const glowStrength = star.twinkle * 10;
+
+      const sizeFactor = star.size;
+
+      if (isLight) {
+        ctx.shadowBlur = 6 + glowStrength;
+        ctx.shadowColor = "rgba(80, 80, 120, 0.35)";
+      } else {
+        ctx.shadowBlur = 5 + glowStrength;
+        ctx.shadowColor = "rgba(255, 255, 255, 0.7)";
+      }
+
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, star.size * star.depth * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (star.size > 1.6) {
+        const starRadius = star.size * 3.2;
+
+        ctx.save();
+        const variation = 0.08 + Math.random() * 0.08;
+        ctx.rotate(Math.sin(time * 0.0007 + star.phase) * variation);
+
+        ctx.globalAlpha = Math.min(0.85, Math.max(0.35, alpha));
+        ctx.fillStyle = color;
+
+        drawFourPointStar(starRadius);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(0, 0, star.size * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
+
+      ctx.shadowBlur = 0;
+
+      ctx.restore();
+    }
+
+    function renderStarfield(time = 0) {
+      ctx.clearRect(0, 0, width, height);
+
+      stars.forEach((star) => drawStar(star, time));
+
+      if (!reduceMotion.matches) {
+        frameId = requestAnimationFrame(renderStarfield);
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = null;
+      resizeStarfield();
+      renderStarfield();
+    });
+    window.addEventListener("pointermove", (event) => {
+      const nextVx = event.clientX - pointer.prevX;
+      const nextVy = event.clientY - pointer.prevY;
+
+      pointer.vx = pointer.vx * 0.75 + nextVx * 0.25;
+      pointer.vy = pointer.vy * 0.75 + nextVy * 0.25;
+
+      pointer.prevX = event.clientX;
+      pointer.prevY = event.clientY;
+
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.active = true;
+    });
+    window.addEventListener("pointerleave", () => {
+      pointer.active = false;
+      pointer.vx = 0;
+      pointer.vy = 0;
+    });
+    reduceMotion.addEventListener("change", () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = null;
+      renderStarfield();
+    });
+
+    resizeStarfield();
+    renderStarfield();
   }
 
   function getSavedTheme() {
@@ -513,7 +731,7 @@
   if (hash && document.getElementById(hash)) {
     setTab(hash, { updateHash: false });
 
-    // 👇 Prevent browser scroll jump
+    // Prevent browser scroll jump
     requestAnimationFrame(() => window.scrollTo(0, 0));
   } else {
     setTab("about", { updateHash: false });
@@ -638,15 +856,13 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "Escape" &&
-      projectModal?.classList.contains("is-open")
-    ) {
+    if (event.key === "Escape" && projectModal?.classList.contains("is-open")) {
       closeProjectModal();
     }
   });
 
   enhanceTechPills();
+  setupStarfield();
 })();
 
 const form = document.getElementById("contactForm");
