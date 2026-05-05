@@ -408,6 +408,23 @@
     }
   }
 
+  function playThemeCrossfade() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    root.classList.remove("theme-crossfade");
+    root.style.setProperty(
+      "--themeFadeColor",
+      getComputedStyle(root).getPropertyValue("--bg0"),
+    );
+    void root.offsetWidth;
+    root.classList.add("theme-crossfade");
+
+    window.setTimeout(() => {
+      root.classList.remove("theme-crossfade");
+      root.style.removeProperty("--themeFadeColor");
+    }, 460);
+  }
+
   function renderThemeIcon(isLight) {
     if (!themeToggle) return;
     themeToggle.title = isLight ? "Switch to dark" : "Switch to light";
@@ -451,6 +468,7 @@
   renderThemeIcon(root.classList.contains("light"));
 
   themeToggle?.addEventListener("click", () => {
+    playThemeCrossfade();
     root.classList.toggle("light");
     const nowLight = root.classList.contains("light");
     saveTheme(nowLight ? "light" : "dark");

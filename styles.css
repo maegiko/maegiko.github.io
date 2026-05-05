@@ -102,6 +102,25 @@ body {
   background: var(--bg0);
 }
 
+html.theme-crossfade body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background: var(--themeFadeColor, var(--bg0));
+  animation: themeCrossfade 420ms ease forwards;
+}
+
+@keyframes themeCrossfade {
+  from {
+    opacity: 0.92;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .shell {
   max-width: var(--max);
   margin: 28px auto;
@@ -449,6 +468,10 @@ body {
   }
   .tabIndicator {
     transition: none;
+  }
+  html.theme-crossfade body::before {
+    animation: none;
+    opacity: 0;
   }
 }
 
