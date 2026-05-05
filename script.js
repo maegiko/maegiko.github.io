@@ -15,6 +15,8 @@
   const pageShell = document.querySelector(".shell");
 
   const tabs = document.querySelectorAll(".tab");
+  const tabsContainer = document.querySelector(".tabs");
+  const tabIndicator = document.querySelector(".tabIndicator");
   const panes = document.querySelectorAll(".pane");
 
   const filters = document.querySelectorAll(".filter");
@@ -455,10 +457,31 @@
     renderThemeIcon(nowLight);
   });
 
+  function updateTabIndicator() {
+    if (!tabsContainer || !tabIndicator) return;
+
+    const activeTab = tabsContainer.querySelector(".tab.is-active");
+    if (!activeTab) {
+      tabsContainer.style.setProperty("--tabIndicatorOpacity", "0");
+      return;
+    }
+
+    const inset = Math.min(12, activeTab.offsetWidth * 0.18);
+    const width = Math.max(18, activeTab.offsetWidth - inset * 2);
+    const x = activeTab.offsetLeft + inset;
+    const y = activeTab.offsetTop + activeTab.offsetHeight + 4;
+
+    tabsContainer.style.setProperty("--tabIndicatorX", `${x}px`);
+    tabsContainer.style.setProperty("--tabIndicatorWidth", `${width}px`);
+    tabsContainer.style.setProperty("--tabIndicatorTop", `${y}px`);
+    tabsContainer.style.setProperty("--tabIndicatorOpacity", "1");
+  }
+
   function setTab(id, { updateHash = true } = {}) {
     tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
 
     panes.forEach((p) => p.classList.toggle("is-active", p.id === id));
+    requestAnimationFrame(updateTabIndicator);
 
     if (updateHash) {
       history.replaceState(null, "", `#${id}`);
@@ -477,6 +500,9 @@
   } else {
     setTab("about", { updateHash: false });
   }
+
+  window.addEventListener("resize", updateTabIndicator);
+  requestAnimationFrame(updateTabIndicator);
 
   // Filters
   function setFilter(tag) {

@@ -321,11 +321,15 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .tabs {
+  position: relative;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  padding-bottom: 9px;
 }
 .tab {
+  position: relative;
+  z-index: 1;
   border: 1px solid var(--stroke2);
   background: rgba(255, 255, 255, 0.035);
   color: var(--muted);
@@ -345,6 +349,24 @@ body {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: color-mix(in srgb, var(--accent) 38%, var(--stroke2));
   color: var(--accent);
+}
+.tabIndicator {
+  position: absolute;
+  left: 0;
+  top: var(--tabIndicatorTop, calc(100% - 3px));
+  width: var(--tabIndicatorWidth, 0);
+  height: 3px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-glow);
+  opacity: var(--tabIndicatorOpacity, 0);
+  transform: translateX(var(--tabIndicatorX, 0));
+  transition:
+    transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.18s ease;
 }
 
 .btn {
@@ -424,6 +446,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .pane.is-active {
     animation: none;
+  }
+  .tabIndicator {
+    transition: none;
   }
 }
 
