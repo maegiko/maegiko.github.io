@@ -28,6 +28,10 @@
   const tabIndicator = document.querySelector(".tabIndicator");
   const panes = document.querySelectorAll(".pane");
 
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
   const filters = document.querySelectorAll(".filter");
   const projects = document.querySelectorAll(".project");
   const projectModal = document.getElementById("projectModal");
@@ -1228,11 +1232,33 @@
 
   const hash = location.hash.replace("#", "");
 
-  if (hash && document.getElementById(hash)) {
-    setTab(hash, { updateHash: false });
+  function keepInitialHashRouteAtTop(target) {
+    const resetScroll = () => {
+      window.scrollTo(0, 0);
+      document.scrollingElement?.scrollTo(0, 0);
 
-    // Prevent browser scroll jump
-    requestAnimationFrame(() => window.scrollTo(0, 0));
+      for (let el = target; el; el = el.parentElement) {
+        el.scrollTop = 0;
+        el.scrollLeft = 0;
+      }
+    };
+
+    resetScroll();
+    requestAnimationFrame(resetScroll);
+    window.addEventListener("load", resetScroll, {
+      once: true,
+    });
+    window.addEventListener("pageshow", resetScroll, {
+      once: true,
+    });
+    setTimeout(resetScroll, 80);
+  }
+
+  const initialHashTarget = hash && document.getElementById(hash);
+
+  if (initialHashTarget) {
+    setTab(hash, { updateHash: false });
+    keepInitialHashRouteAtTop(initialHashTarget);
   } else {
     setTab("about", { updateHash: false });
   }
