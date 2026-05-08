@@ -561,13 +561,14 @@
         }
 
         if (isDark) {
-          const tone = 1 - this.brightness / 255;
+          const tone = Math.pow(this.brightness / 255, 1.18);
+          const shadowLift = Math.pow(1 - tone, 2) * 0.1;
 
-          const r = 125 + tone * 95;
-          const g = 122 + tone * 92;
-          const b = 116 + tone * 86;
+          const r = 126 + tone * 84;
+          const g = 122 + tone * 82;
+          const b = 112 + tone * 76;
 
-          const alpha = (0.22 + tone * 0.62) * this.opacity;
+          const alpha = (0.17 + tone * 0.54 + shadowLift) * this.opacity;
 
           ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         } else {
@@ -614,10 +615,12 @@
 
     function chooseAsciiChar(x, y, pixel) {
       const brightness = getBrightness(pixel);
+      const isDark = !root.classList.contains("light");
 
       const chars = "@#W$9876543210?!abc;:+=-,._ ";
 
-      const index = Math.floor((brightness / 255) * (chars.length - 1));
+      const value = isDark ? 1 - brightness / 255 : brightness / 255;
+      const index = Math.floor(value * (chars.length - 1));
 
       return chars[index];
     }
@@ -630,7 +633,10 @@
       offscreen.width = width;
       offscreen.height = height;
       offCtx.clearRect(0, 0, width, height);
-      offCtx.filter = "grayscale(1) contrast(0.82) brightness(1.08)";
+      const isDark = !root.classList.contains("light");
+      offCtx.filter = isDark
+        ? "grayscale(1) contrast(0.95) brightness(1.04)"
+        : "grayscale(1) contrast(0.82) brightness(1.08)";
       offCtx.drawImage(image, 0, 0, width, height);
 
       const pixels = offCtx.getImageData(0, 0, width, height).data;
@@ -767,6 +773,10 @@
     });
 
     window.addEventListener("asciiAvatar:reveal", revealAsciiAvatar);
+    window.addEventListener("asciiAvatar:themechange", () => {
+      if (performance.now() < assemblyUntil) return;
+      rebuildParticles();
+    });
 
     if ("ResizeObserver" in window) {
       const observer = new ResizeObserver(() => {
@@ -1097,6 +1107,7 @@
     const nowLight = root.classList.contains("light");
     saveTheme(nowLight ? "light" : "dark");
     renderThemeIcon(nowLight);
+    window.dispatchEvent(new CustomEvent("asciiAvatar:themechange"));
   });
 
   function updateTabIndicator() {
