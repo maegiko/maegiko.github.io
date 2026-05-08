@@ -494,8 +494,7 @@ html.theme-crossfade body::before {
   .card::before,
   .sideTile::before,
   .tile::before,
-  .project::before,
-  .projectModalCard::before {
+  .project::before {
     animation: none;
     transform: translate3d(0, 0, 0);
   }
@@ -1651,8 +1650,7 @@ html.loaded .card.main {
 .card > *,
 .sideTile > *,
 .tile > *,
-.project > *,
-.projectModalCard > * {
+.project > * {
   position: relative;
   z-index: 1;
 }
@@ -1660,8 +1658,7 @@ html.loaded .card.main {
 .card::before,
 .sideTile::before,
 .tile::before,
-.project::before,
-.projectModalCard::before {
+.project::before {
   content: "";
   position: absolute;
   inset: -35%;
@@ -1686,8 +1683,7 @@ html.loaded .card.main {
 :root.light .card::before,
 :root.light .sideTile::before,
 :root.light .tile::before,
-:root.light .project::before,
-:root.light .projectModalCard::before {
+:root.light .project::before {
   background: linear-gradient(
     115deg,
     transparent 32%,
@@ -1796,8 +1792,7 @@ html.loaded .card.main {
   .card::after,
   .sideTile::after,
   .tile::after,
-  .project::after,
-  .projectModalCard::after {
+  .project::after {
     --orbitAngle: 0deg;
     padding: 1.5px;
     background: conic-gradient(
@@ -1839,8 +1834,7 @@ html.loaded .card.main {
   :root.light .card::after,
   :root.light .sideTile::after,
   :root.light .tile::after,
-  :root.light .project::after,
-  :root.light .projectModalCard::after {
+  :root.light .project::after {
     background: conic-gradient(
       from var(--orbitAngle),
       transparent 0deg,
@@ -1872,8 +1866,7 @@ html.loaded .card.main {
 
   .sideTile,
   .tile,
-  .project,
-  .projectModalCard {
+  .project {
     --orbitDuration: 28s;
   }
 
