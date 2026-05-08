@@ -432,6 +432,7 @@
     let frameId = null;
     let assemblyUntil = 0;
     let revealFrameId = null;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     class Particle {
       constructor(x, y, char, color, brightness) {
@@ -558,6 +559,13 @@
           const lens = influence.field * 24;
           drawX += influence.ux * lens;
           drawY += influence.uy * lens;
+        } else if (!reduceMotion.matches && this.assembleStart === 0) {
+          const time = performance.now();
+          const wave =
+            Math.sin(time * 0.0014 + this.originY * 0.055 + this.originX * 0.01) *
+            0.32;
+          drawX += wave * 0.45;
+          drawY += wave;
         }
 
         if (isDark) {
