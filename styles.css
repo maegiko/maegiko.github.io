@@ -87,6 +87,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family:
     "Inter",
     ui-sans-serif,
@@ -1525,12 +1527,6 @@ html.loaded .card.main {
   animation: tDotBreathe 1.6s ease-in-out infinite;
 }
 
-body::after {
-  content: "";
-  display: block;
-  height: calc(10px + env(safe-area-inset-bottom));
-}
-
 @media (max-width: 431px) {
   .tab {
     padding: 10px 10px;
@@ -1751,9 +1747,10 @@ html.chrome-mac.loaded .socialRow {
 .siteFooter {
   display: flex;
   flex-direction: column;
-  position: fixed;
-  right: 14px;
-  bottom: 10px;
+  align-items: flex-end;
+  width: 100%;
+  margin: auto 0 10px;
+  padding: 0 14px;
   z-index: 2;
   color: var(--faint);
   font-size: 11px;
@@ -1761,6 +1758,10 @@ html.chrome-mac.loaded .socialRow {
   opacity: 0.5;
   pointer-events: none;
   text-align: right;
+}
+
+:root.light .siteFooter {
+  color: rgb(20, 20, 22);
 }
 
 @media (max-width: 720px) {
