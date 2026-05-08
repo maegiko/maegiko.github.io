@@ -79,14 +79,14 @@
 }
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 html {
   background: var(--bg0);
 }
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   font-family:
@@ -126,11 +126,12 @@ html.theme-crossfade body::before {
 .shell {
   position: relative;
   z-index: 1;
+  width: min(100%, var(--max));
   max-width: var(--max);
   margin: 28px auto;
   padding: 0 18px;
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 340px minmax(0, 1fr);
   gap: 18px;
 }
 
@@ -188,6 +189,9 @@ html.theme-crossfade body::before {
   height: fit-content;
 }
 .main {
+  width: 100%;
+  min-width: 0;
+  align-self: start;
   padding: 12px 12px 16px;
   min-height: auto; /* or just delete the min-height line */
   position: relative;
@@ -454,6 +458,7 @@ html.theme-crossfade body::before {
 
 .pane {
   display: none;
+  width: 100%;
   padding: 16px 14px 4px;
 }
 
@@ -1132,7 +1137,8 @@ body.modal-open {
 }
 
 .form {
-  max-width: 520px;
+  width: 100%;
+  max-width: none;
 }
 .field {
   display: grid;
@@ -1145,6 +1151,7 @@ label {
 }
 input,
 textarea {
+  width: 100%;
   border: 1px solid var(--stroke2);
   background: rgba(255, 255, 255, 0.035);
   color: var(--text);
