@@ -813,6 +813,9 @@
   function setupStarfield() {
     if (!backgroundLayer) return;
 
+    const desktopStarfield = window.matchMedia("(min-width: 721px)");
+    if (!desktopStarfield.matches) return;
+
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -1032,6 +1035,12 @@
       if (frameId) cancelAnimationFrame(frameId);
       frameId = null;
       renderStarfield();
+    });
+    desktopStarfield.addEventListener("change", () => {
+      if (desktopStarfield.matches) return;
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = null;
+      canvas.remove();
     });
 
     resizeStarfield();

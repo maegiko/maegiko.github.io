@@ -1976,6 +1976,14 @@ html.chrome-mac.loaded .socialRow {
 }
 
 @media (max-width: 720px) {
+  .card::after,
+  .sideTile::after,
+  .tile::after,
+  .project::after {
+    animation: none;
+    background: none;
+  }
+
   .about-me-content {
     align-items: stretch;
     flex-direction: column;
