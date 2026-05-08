@@ -1721,6 +1721,21 @@ body::after {
   max-width: 44ch;
 }
 
+.siteFooter {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 14px;
+  bottom: 10px;
+  z-index: 2;
+  color: var(--faint);
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.5;
+  pointer-events: none;
+  text-align: right;
+}
+
 @media (max-width: 720px) {
   .about-me-content {
     align-items: stretch;
