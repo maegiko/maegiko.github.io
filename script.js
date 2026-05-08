@@ -1,6 +1,14 @@
 // script.js
 (function () {
   const root = document.documentElement;
+  const isChromeMac =
+    /Macintosh/.test(navigator.userAgent) &&
+    /Chrome\//.test(navigator.userAgent) &&
+    !/Edg\/|OPR\//.test(navigator.userAgent);
+
+  if (isChromeMac) {
+    root.classList.add("chrome-mac");
+  }
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
@@ -806,10 +814,13 @@
     let dpr = 1;
     let stars = [];
     let frameId = null;
+    let lastRenderTime = 0;
 
     function createStars() {
       const area = width * height;
-      const count = Math.max(42, Math.min(110, Math.floor(area / 15000)));
+      const count = isChromeMac
+        ? Math.max(32, Math.min(68, Math.floor(area / 24000)))
+        : Math.max(42, Math.min(110, Math.floor(area / 15000)));
 
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * width,
@@ -822,11 +833,12 @@
         drift: Math.random() * 10 + 4,
         depth: Math.random() * 0.7 + 0.3,
         twinkle: Math.random() * 0.28 + 0.35,
+        rotationVariation: Math.random() * 0.08 + 0.08,
       }));
     }
 
     function resizeStarfield() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, isChromeMac ? 1.25 : 2);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.floor(width * dpr);
@@ -912,10 +924,10 @@
       const sizeFactor = star.size;
 
       if (isLight) {
-        ctx.shadowBlur = 6 + glowStrength;
+        ctx.shadowBlur = (isChromeMac ? 3 : 6) + glowStrength * 0.65;
         ctx.shadowColor = "rgba(80, 80, 120, 0.35)";
       } else {
-        ctx.shadowBlur = 5 + glowStrength;
+        ctx.shadowBlur = (isChromeMac ? 2 : 5) + glowStrength * 0.65;
         ctx.shadowColor = "rgba(255, 255, 255, 0.7)";
       }
 
@@ -930,8 +942,9 @@
         const starRadius = star.size * 3.2;
 
         ctx.save();
-        const variation = 0.08 + Math.random() * 0.08;
-        ctx.rotate(Math.sin(time * 0.0007 + star.phase) * variation);
+        ctx.rotate(
+          Math.sin(time * 0.0007 + star.phase) * star.rotationVariation,
+        );
 
         ctx.globalAlpha = Math.min(0.85, Math.max(0.35, alpha));
         ctx.fillStyle = color;
@@ -953,6 +966,12 @@
     }
 
     function renderStarfield(time = 0) {
+      if (isChromeMac && time - lastRenderTime < 1000 / 30) {
+        frameId = requestAnimationFrame(renderStarfield);
+        return;
+      }
+
+      lastRenderTime = time;
       ctx.clearRect(0, 0, width, height);
 
       stars.forEach((star) => drawStar(star, time));
