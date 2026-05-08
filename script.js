@@ -393,6 +393,389 @@
     scope.querySelectorAll(".t2Tag, .tag").forEach(enhanceTechPill);
   }
 
+  function setupAsciiAvatar() {
+    const canvas = document.getElementById("asciiCanvas");
+    const image = document.getElementById("sourceImage");
+    if (!canvas || !image) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const offscreen = document.createElement("canvas");
+    const offCtx = offscreen.getContext("2d");
+    if (!offCtx) return;
+
+    const particles = [];
+    const mouse = {
+      x: 0,
+      y: 0,
+      prevX: 0,
+      prevY: 0,
+      vx: 0,
+      vy: 0,
+      coreRadius: 10,
+      fieldRadius: 80,
+      active: false,
+    };
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let frameId = null;
+    let assemblyUntil = 0;
+    let revealFrameId = null;
+
+    class Particle {
+      constructor(x, y, char, color, brightness) {
+        this.x = x;
+        this.y = y;
+        this.originX = x;
+        this.originY = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.char = char;
+        this.color = color;
+        this.brightness = brightness;
+        this.opacity = 1;
+        this.assembleStart = 0;
+        this.assembleDelay = 0;
+        this.assembleHold = 120;
+        this.assembleDuration = 780;
+        this.startX = x;
+        this.startY = y;
+      }
+
+      getCursorInfluence() {
+        if (!mouse.active) {
+          return null;
+        }
+
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance >= mouse.fieldRadius || distance <= 0.01) {
+          return null;
+        }
+
+        const angle = Math.atan2(dy, dx);
+        const ux = Math.cos(angle);
+        const uy = Math.sin(angle);
+        const fieldFalloff = 1 - distance / mouse.fieldRadius;
+        const coreFalloff =
+          distance < mouse.coreRadius
+            ? 1 - distance / mouse.coreRadius
+            : 0;
+
+        return {
+          distance,
+          ux,
+          uy,
+          field: fieldFalloff ** 2,
+          core: coreFalloff ** 0.72,
+        };
+      }
+
+      update(time) {
+        if (this.assembleStart > 0) {
+          const rawProgress =
+            (time -
+              this.assembleStart -
+              this.assembleHold -
+              this.assembleDelay) /
+            this.assembleDuration;
+
+          if (rawProgress < 1) {
+            const progress = Math.max(0, rawProgress);
+            const eased = 1 - (1 - progress) ** 3;
+            const drift = Math.sin(time * 0.004 + this.originX * 0.05) * 8;
+
+            this.x =
+              this.startX +
+              (this.originX - this.startX) * eased +
+              Math.sin(progress * Math.PI) * drift;
+            this.y =
+              this.startY +
+              (this.originY - this.startY) * eased +
+              Math.sin(progress * Math.PI) * drift * 0.55;
+            this.vx = 0;
+            this.vy = 0;
+            return;
+          }
+
+          this.x = this.originX;
+          this.y = this.originY;
+          this.vx = 0;
+          this.vy = 0;
+          this.assembleStart = 0;
+        }
+
+        if (mouse.active) {
+          const influence = this.getCursorInfluence();
+
+          if (influence) {
+            const orbit =
+              Math.sin(time * 0.006 + this.originX * 0.045 + this.originY) *
+              influence.field;
+            const radialForce = influence.core * 28 + influence.field * 4.8;
+            const orbitForce = orbit * 2.4;
+
+            this.vx += influence.ux * radialForce;
+            this.vy += influence.uy * radialForce;
+            this.vx += -influence.uy * orbitForce;
+            this.vy += influence.ux * orbitForce;
+            this.vx += mouse.vx * influence.field * 0.055;
+            this.vy += mouse.vy * influence.field * 0.055;
+          }
+        }
+
+        const spring = 0.24;
+        const friction = 0.82;
+
+        this.vx += (this.originX - this.x) * spring;
+        this.vy += (this.originY - this.y) * spring;
+
+        this.vx *= friction;
+        this.vy *= friction;
+
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+
+      draw() {
+        const isDark = !root.classList.contains("light");
+        const influence = this.getCursorInfluence();
+        let drawX = this.x;
+        let drawY = this.y;
+
+        if (influence) {
+          const lens = influence.field * 24;
+          drawX += influence.ux * lens;
+          drawY += influence.uy * lens;
+        }
+
+        if (isDark) {
+          const alpha =
+            (0.18 + (1 - this.brightness / 255) * 0.45) * this.opacity;
+          ctx.fillStyle = `rgba(196, 192, 184, ${alpha})`;
+        } else {
+          ctx.fillStyle = `rgba(20, 20, 22, ${0.64 * this.opacity})`;
+        }
+
+        ctx.fillText(this.char, drawX, drawY);
+      }
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const imageRatio =
+        image.naturalHeight > 0
+          ? image.naturalWidth / image.naturalHeight
+          : 465 / 536;
+
+      width = Math.max(1, Math.round(rect.width));
+      height = Math.max(1, Math.round(width / imageRatio));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.style.height = `${height}px`;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getPixel(x, y, pixels) {
+      const safeX = Math.max(0, Math.min(width - 1, x));
+      const safeY = Math.max(0, Math.min(height - 1, y));
+      const index = (safeY * width + safeX) * 4;
+
+      return {
+        r: pixels[index],
+        g: pixels[index + 1],
+        b: pixels[index + 2],
+        a: pixels[index + 3],
+      };
+    }
+
+    function getBrightness(pixel) {
+      return (pixel.r + pixel.g + pixel.b) / 3;
+    }
+
+    function chooseAsciiChar(x, y, pixel) {
+      const brightness = getBrightness(pixel);
+
+      const chars = "@#W$9876543210?!abc;:+=-,._ ";
+
+      const index = Math.floor((brightness / 255) * (chars.length - 1));
+
+      return chars[index];
+    }
+
+    function imageToParticles({ assemble = false } = {}) {
+      if (!image.complete || width <= 1 || height <= 1) return;
+
+      particles.length = 0;
+
+      offscreen.width = width;
+      offscreen.height = height;
+      offCtx.clearRect(0, 0, width, height);
+      offCtx.filter = "grayscale(1) contrast(0.82) brightness(1.08)";
+      offCtx.drawImage(image, 0, 0, width, height);
+
+      const pixels = offCtx.getImageData(0, 0, width, height).data;
+      const gap = Math.max(3, Math.round(width / 50));
+
+      for (let y = 0; y < height; y += gap) {
+        for (let x = 0; x < width; x += gap) {
+          const pixel = getPixel(x, y, pixels);
+
+          if (pixel.a < 115) continue;
+
+          const brightness = getBrightness(pixel);
+          if (brightness > 252) continue;
+
+          const particle = new Particle(
+            x,
+            y,
+            chooseAsciiChar(x, y, pixel, pixels, gap),
+            "",
+            brightness,
+          );
+
+          if (assemble) {
+            particle.startX = Math.random() * width;
+            particle.startY = Math.random() * height;
+            particle.x = particle.startX;
+            particle.y = particle.startY;
+            particle.assembleDelay = Math.random() * 180;
+          }
+
+          particles.push(particle);
+        }
+      }
+    }
+
+    function triggerInitialAssembly() {
+      if (particles.length === 0 || width <= 1 || height <= 1) return;
+
+      const now = performance.now();
+      assemblyUntil = now + 1300;
+
+      for (const particle of particles) {
+        particle.assembleStart = now;
+        particle.opacity = 1;
+        particle.vx = 0;
+        particle.vy = 0;
+      }
+    }
+
+    function rebuildParticles(options) {
+      resizeCanvas();
+      imageToParticles(options);
+    }
+
+    function reserveAssemblyWindow() {
+      assemblyUntil = performance.now() + 1300;
+    }
+
+    function revealAsciiAvatar() {
+      if (revealFrameId !== null) {
+        cancelAnimationFrame(revealFrameId);
+      }
+
+      mouse.active = false;
+      mouse.vx = 0;
+      mouse.vy = 0;
+      reserveAssemblyWindow();
+      rebuildParticles({ assemble: true });
+      revealFrameId = requestAnimationFrame(() => {
+        revealFrameId = null;
+        triggerInitialAssembly();
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.font = `${Math.max(7, Math.round(width / 38))}px monospace`;
+      ctx.textBaseline = "middle";
+
+      const particleColor = getComputedStyle(root)
+        .getPropertyValue("--ascii-color")
+        .trim();
+
+      const time = performance.now();
+
+      for (const particle of particles) {
+        particle.color = particleColor;
+        particle.update(time);
+        particle.draw();
+      }
+
+      frameId = requestAnimationFrame(animate);
+    }
+
+    function startAnimation() {
+      if (frameId !== null) return;
+      reserveAssemblyWindow();
+      rebuildParticles({ assemble: true });
+      triggerInitialAssembly();
+      animate();
+    }
+
+    window.addEventListener("pointermove", (event) => {
+      const rect = canvas.getBoundingClientRect();
+      const nextX = event.clientX - rect.left;
+      const nextY = event.clientY - rect.top;
+      const margin = mouse.fieldRadius;
+      const isNearCanvas =
+        nextX >= -margin &&
+        nextX <= rect.width + margin &&
+        nextY >= -margin &&
+        nextY <= rect.height + margin;
+
+      if (!isNearCanvas) {
+        mouse.active = false;
+        mouse.vx = 0;
+        mouse.vy = 0;
+        return;
+      }
+
+      mouse.vx = mouse.active ? nextX - mouse.prevX : 0;
+      mouse.vy = mouse.active ? nextY - mouse.prevY : 0;
+      mouse.prevX = nextX;
+      mouse.prevY = nextY;
+      mouse.x = nextX;
+      mouse.y = nextY;
+      mouse.active = true;
+    });
+
+    window.addEventListener("pointerleave", () => {
+      mouse.active = false;
+      mouse.vx = 0;
+      mouse.vy = 0;
+    });
+
+    window.addEventListener("asciiAvatar:reveal", revealAsciiAvatar);
+
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(() => {
+        if (performance.now() < assemblyUntil) return;
+        rebuildParticles();
+      });
+      observer.observe(canvas);
+    } else {
+      window.addEventListener("resize", () => {
+        if (performance.now() < assemblyUntil) return;
+        rebuildParticles();
+      });
+    }
+
+    image.addEventListener("load", startAnimation, { once: true });
+
+    if (image.complete) {
+      startAnimation();
+    }
+  }
+
   function setupStarfield() {
     if (!backgroundLayer) return;
 
@@ -719,6 +1102,12 @@
     panes.forEach((p) => p.classList.toggle("is-active", p.id === id));
     requestAnimationFrame(updateTabIndicator);
 
+    if (id === "about") {
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
+      });
+    }
+
     if (updateHash) {
       history.replaceState(null, "", `#${id}`);
     }
@@ -862,6 +1251,7 @@
   });
 
   enhanceTechPills();
+  setupAsciiAvatar();
   setupStarfield();
 })();
 

@@ -58,7 +58,6 @@
           <!-- HERO -->
           <div class="sideTile sideHero">
             <div class="avatar avatarLarge" aria-hidden="true">
-              <!-- Replace with an <img> if you want -->
               <img src="./images/me.jpeg" alt="Portrait of Kenneth Koon" />
             </div>
             <h1 class="sideName">Kenneth Koon</h1>
@@ -213,12 +212,26 @@
 
         <!-- ABOUT -->
         <section class="pane is-active" id="about" aria-label="About section">
-          <h2 class="h2">About me</h2>
-          <p class="lead">
-            I build software that's clean and enjoyable to use, with a focus on
-            UI/UX and solid engineering. I’m currently studying Computer Science
-            at UNSW, building and deploying projects in my spare time.
-          </p>
+          <div class="about-me-content">
+            <div>
+              <h2 class="h2">About me</h2>
+              <p class="lead">
+                I build software that's clean and enjoyable to use, with a focus
+                on UI/UX and solid engineering. I’m currently studying Computer
+                Science at UNSW, building and deploying projects in my spare
+                time.
+              </p>
+            </div>
+
+            <canvas id="asciiCanvas"></canvas>
+
+            <img
+              id="sourceImage"
+              src="./images/hero-ascii.png"
+              crossorigin="anonymous"
+              hidden
+            />
+          </div>
 
           <div class="grid2">
             <div class="tile">
