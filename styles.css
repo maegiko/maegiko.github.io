@@ -499,6 +499,14 @@ html.theme-crossfade body::before {
     animation: none;
     transform: translate3d(0, 0, 0);
   }
+  .card::after,
+  .sideTile::after,
+  .tile::after,
+  .project::after,
+  .projectModalCard::after {
+    animation: none;
+    will-change: auto;
+  }
   .bgCanvas {
     opacity: 0.55;
   }
@@ -1714,6 +1722,12 @@ html.loaded .card.main {
   }
 }
 
+@property --orbitAngle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 :root.light .card,
 :root.light .sideTile,
 :root.light .tile,
@@ -1776,6 +1790,98 @@ html.loaded .card.main {
 .project::after,
 .projectModalCard::after {
   z-index: 2;
+}
+
+@supports ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+  .card::after,
+  .sideTile::after,
+  .tile::after,
+  .project::after,
+  .projectModalCard::after {
+    --orbitAngle: 0deg;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--orbitAngle),
+      transparent 0deg,
+      transparent 230deg,
+      rgba(255, 255, 255, 0.09) 260deg,
+      rgba(255, 245, 210, 0.34) 286deg,
+      rgba(255, 255, 255, 0.09) 312deg,
+      transparent 342deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: borderGlowOrbit var(--orbitDuration, 30s) linear infinite;
+    will-change: --orbitAngle;
+  }
+
+  .card::after {
+    padding: 1.7px;
+    background: conic-gradient(
+      from var(--orbitAngle),
+      transparent 0deg,
+      transparent 224deg,
+      rgba(255, 255, 255, 0.11) 258deg,
+      rgba(255, 245, 210, 0.44) 286deg,
+      rgba(255, 255, 255, 0.11) 314deg,
+      transparent 348deg,
+      transparent 360deg
+    );
+  }
+
+  :root.light .card::after,
+  :root.light .sideTile::after,
+  :root.light .tile::after,
+  :root.light .project::after,
+  :root.light .projectModalCard::after {
+    background: conic-gradient(
+      from var(--orbitAngle),
+      transparent 0deg,
+      transparent 230deg,
+      rgba(255, 255, 255, 0.16) 260deg,
+      rgba(255, 255, 255, 0.58) 286deg,
+      rgba(255, 255, 255, 0.16) 312deg,
+      transparent 342deg,
+      transparent 360deg
+    );
+  }
+
+  :root.light .card::after {
+    background: conic-gradient(
+      from var(--orbitAngle),
+      transparent 0deg,
+      transparent 224deg,
+      rgba(255, 255, 255, 0.2) 258deg,
+      rgba(255, 255, 255, 0.68) 286deg,
+      rgba(255, 255, 255, 0.2) 314deg,
+      transparent 348deg,
+      transparent 360deg
+    );
+  }
+
+  .card {
+    --orbitDuration: 34s;
+  }
+
+  .sideTile,
+  .tile,
+  .project,
+  .projectModalCard {
+    --orbitDuration: 28s;
+  }
+
+  @keyframes borderGlowOrbit {
+    to {
+      --orbitAngle: 360deg;
+    }
+  }
 }
 
 :root.light .card,
