@@ -1149,6 +1149,75 @@
 
   tabs.forEach((t) => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
+  function setupMagneticTabs() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const strength = 0.16;
+    const maxShift = 4;
+
+    tabs.forEach((tab) => {
+      let frameId = null;
+      let targetX = 0;
+      let targetY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      let glow = 0;
+      let targetGlow = 0;
+
+      function render() {
+        currentX += (targetX - currentX) * 0.22;
+        currentY += (targetY - currentY) * 0.22;
+        glow += (targetGlow - glow) * 0.2;
+
+        tab.style.setProperty("--magnetX", `${currentX.toFixed(2)}px`);
+        tab.style.setProperty("--magnetY", `${currentY.toFixed(2)}px`);
+        tab.style.setProperty("--magnetGlow", glow.toFixed(3));
+
+        const settled =
+          Math.abs(targetX - currentX) < 0.02 &&
+          Math.abs(targetY - currentY) < 0.02 &&
+          Math.abs(targetGlow - glow) < 0.01;
+
+        if (settled) {
+          currentX = targetX;
+          currentY = targetY;
+          glow = targetGlow;
+          tab.style.setProperty("--magnetX", `${currentX.toFixed(2)}px`);
+          tab.style.setProperty("--magnetY", `${currentY.toFixed(2)}px`);
+          tab.style.setProperty("--magnetGlow", glow.toFixed(3));
+          frameId = null;
+          return;
+        }
+
+        frameId = requestAnimationFrame(render);
+      }
+
+      function start() {
+        if (frameId === null) frameId = requestAnimationFrame(render);
+      }
+
+      tab.addEventListener("pointermove", (event) => {
+        const rect = tab.getBoundingClientRect();
+        const x = event.clientX - (rect.left + rect.width / 2);
+        const y = event.clientY - (rect.top + rect.height / 2);
+
+        targetX = Math.max(-maxShift, Math.min(maxShift, x * strength));
+        targetY = Math.max(-maxShift, Math.min(maxShift, y * strength));
+        targetGlow = 1;
+        start();
+      });
+
+      tab.addEventListener("pointerleave", () => {
+        targetX = 0;
+        targetY = 0;
+        targetGlow = 0;
+        start();
+      });
+    });
+  }
+
+  setupMagneticTabs();
+
   const hash = location.hash.replace("#", "");
 
   if (hash && document.getElementById(hash)) {
