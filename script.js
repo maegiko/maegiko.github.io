@@ -463,9 +463,7 @@
         const uy = Math.sin(angle);
         const fieldFalloff = 1 - distance / mouse.fieldRadius;
         const coreFalloff =
-          distance < mouse.coreRadius
-            ? 1 - distance / mouse.coreRadius
-            : 0;
+          distance < mouse.coreRadius ? 1 - distance / mouse.coreRadius : 0;
 
         return {
           distance,
@@ -555,9 +553,15 @@
         }
 
         if (isDark) {
-          const alpha =
-            (0.18 + (1 - this.brightness / 255) * 0.45) * this.opacity;
-          ctx.fillStyle = `rgba(196, 192, 184, ${alpha})`;
+          const tone = 1 - this.brightness / 255;
+
+          const r = 125 + tone * 95;
+          const g = 122 + tone * 92;
+          const b = 116 + tone * 86;
+
+          const alpha = (0.22 + tone * 0.62) * this.opacity;
+
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         } else {
           ctx.fillStyle = `rgba(20, 20, 22, ${0.64 * this.opacity})`;
         }
