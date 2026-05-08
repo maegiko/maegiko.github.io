@@ -491,6 +491,14 @@ html.theme-crossfade body::before {
     animation: none;
     opacity: 0;
   }
+  .card::before,
+  .sideTile::before,
+  .tile::before,
+  .project::before,
+  .projectModalCard::before {
+    animation: none;
+    transform: translate3d(0, 0, 0);
+  }
   .bgCanvas {
     opacity: 0.55;
   }
@@ -1627,8 +1635,83 @@ html.loaded .card.main {
 .tile,
 .project,
 .projectModalCard {
+  isolation: isolate;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+}
+
+.card > *,
+.sideTile > *,
+.tile > *,
+.project > *,
+.projectModalCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card::before,
+.sideTile::before,
+.tile::before,
+.project::before,
+.projectModalCard::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.035) 42%,
+    rgba(255, 255, 255, 0.105) 50%,
+    rgba(255, 255, 255, 0.035) 58%,
+    transparent 68%
+  );
+  opacity: 0.48;
+  transform: translate3d(-18%, 0, 0);
+  animation: glassShimmerDrift var(--shimmerDuration, 22s) ease-in-out infinite
+    alternate;
+  will-change: transform;
+}
+
+:root.light .card::before,
+:root.light .sideTile::before,
+:root.light .tile::before,
+:root.light .project::before,
+:root.light .projectModalCard::before {
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.12) 42%,
+    rgba(255, 255, 255, 0.36) 50%,
+    rgba(255, 255, 255, 0.12) 58%,
+    transparent 68%
+  );
+  opacity: 0.36;
+}
+
+.card.main {
+  --shimmerDuration: 24s;
+}
+
+.card.side {
+  --shimmerDuration: 26s;
+}
+
+.sideTile,
+.tile,
+.project {
+  --shimmerDuration: 20s;
+}
+
+@keyframes glassShimmerDrift {
+  from {
+    transform: translate3d(-18%, 0, 0);
+  }
+  to {
+    transform: translate3d(18%, 0, 0);
+  }
 }
 
 :root.light .card,
@@ -1685,6 +1768,14 @@ html.loaded .card.main {
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
     inset 0 -1px 0 rgba(0, 0, 0, 0.08);
   opacity: 1;
+}
+
+.card::after,
+.sideTile::after,
+.tile::after,
+.project::after,
+.projectModalCard::after {
+  z-index: 2;
 }
 
 :root.light .card,
