@@ -1,6 +1,6 @@
 # Kenneth Koon Portfolio 👨‍💻
 
-Personal portfolio website for Kenneth Koon, a Computer Science student at UNSW based in Sydney, Australia 🇦🇺.
+Personal portfolio website for Kenneth Koon, a Computer Science student at UNSW based in Sydney, Australia.
 
 [Link to Website](https://maegiko.github.io)
 
