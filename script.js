@@ -1039,17 +1039,17 @@
 
       stars.forEach((star) => drawStar(star, time));
 
-      const moving = stars.some(
-        (star) => Math.abs(star.vx) + Math.abs(star.vy) > 0.025,
-      );
       const pointerFresh = performance.now() - pointer.lastMove < 220;
 
-      if (!reduceMotion.matches && (pointerFresh || moving)) {
+      if (!pointerFresh) {
+        pointer.active = false;
+      }
+
+      if (!reduceMotion.matches) {
         frameId = requestAnimationFrame(renderStarfield);
         return;
       }
 
-      pointer.active = false;
       frameId = null;
     }
 
