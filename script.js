@@ -846,17 +846,18 @@
     let dpr = 1;
     let stars = [];
     let frameId = null;
-    let lastRenderTime = 0;
 
-    function createStars() {
+    function getStarCount() {
       const area = width * height;
-      const count = isChromeMac
+      return isChromeMac
         ? Math.max(32, Math.min(60, Math.floor(area / 26000)))
         : Math.max(38, Math.min(82, Math.floor(area / 20000)));
+    }
 
-      stars = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
+    function createStar(x = Math.random() * width, y = Math.random() * height) {
+      return {
+        x,
+        y,
         vx: 0,
         vy: 0,
         size: Math.random() * 1.8 + 0.8,
@@ -866,10 +867,42 @@
         depth: Math.random() * 0.7 + 0.3,
         twinkle: Math.random() * 0.28 + 0.35,
         rotationVariation: Math.random() * 0.08 + 0.08,
-      }));
+      };
     }
 
-    function resizeStarfield() {
+    function createStars() {
+      stars = Array.from({ length: getStarCount() }, () => createStar());
+    }
+
+    function reconcileStars(previousWidth, previousHeight) {
+      if (stars.length === 0 || previousWidth <= 0 || previousHeight <= 0) {
+        createStars();
+        return;
+      }
+
+      const scaleX = width / previousWidth;
+      const scaleY = height / previousHeight;
+
+      stars.forEach((star) => {
+        star.x = Math.max(-20, Math.min(width + 20, star.x * scaleX));
+        star.y = Math.max(-20, Math.min(height + 20, star.y * scaleY));
+      });
+
+      const targetCount = getStarCount();
+
+      if (stars.length > targetCount) {
+        stars.length = targetCount;
+      }
+
+      while (stars.length < targetCount) {
+        stars.push(createStar());
+      }
+    }
+
+    function resizeStarfield({ preserveStars = true } = {}) {
+      const previousWidth = width;
+      const previousHeight = height;
+
       dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       width = window.innerWidth;
       height = window.innerHeight;
@@ -878,7 +911,12 @@
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      createStars();
+
+      if (preserveStars) {
+        reconcileStars(previousWidth, previousHeight);
+      } else {
+        createStars();
+      }
     }
 
     function drawFourPointStar(radius) {
@@ -997,12 +1035,6 @@
     }
 
     function renderStarfield(time = 0) {
-      if (isChromeMac && time - lastRenderTime < 1000 / 30) {
-        frameId = requestAnimationFrame(renderStarfield);
-        return;
-      }
-
-      lastRenderTime = time;
       ctx.clearRect(0, 0, width, height);
 
       stars.forEach((star) => drawStar(star, time));
@@ -1033,9 +1065,11 @@
       resizeStarfield();
       requestStarfieldRender();
     });
-    window.addEventListener("pointermove", (event) => {
-      const nextVx = event.clientX - pointer.prevX;
-      const nextVy = event.clientY - pointer.prevY;
+    function handleStarPointerMove(event) {
+      const hasMovement =
+        typeof event.movementX === "number" || typeof event.movementY === "number";
+      const nextVx = hasMovement ? event.movementX : event.clientX - pointer.prevX;
+      const nextVy = hasMovement ? event.movementY : event.clientY - pointer.prevY;
 
       pointer.vx = pointer.vx * 0.75 + nextVx * 0.25;
       pointer.vy = pointer.vy * 0.75 + nextVy * 0.25;
@@ -1047,7 +1081,17 @@
       pointer.lastMove = performance.now();
 
       requestStarfieldRender();
+    }
+
+    window.addEventListener("pointermove", handleStarPointerMove, {
+      passive: true,
     });
+
+    if (isChromeMac) {
+      window.addEventListener("mousemove", handleStarPointerMove, {
+        passive: true,
+      });
+    }
     window.addEventListener("pointerleave", () => {
       pointer.active = false;
       pointer.vx = 0;
@@ -1065,7 +1109,7 @@
       canvas.remove();
     });
 
-    resizeStarfield();
+    resizeStarfield({ preserveStars: false });
     requestStarfieldRender();
   }
 
