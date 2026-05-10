@@ -1217,6 +1217,74 @@
     tabsContainer.style.setProperty("--tabIndicatorOpacity", "1");
   }
 
+  const aboutLead = document.querySelector("#about .lead");
+  const aboutLeadText = aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
+  let aboutLeadFrameId = null;
+
+  function animateAboutLead() {
+    if (!aboutLead || !aboutLeadText) return;
+
+    if (aboutLeadFrameId !== null) {
+      cancelAnimationFrame(aboutLeadFrameId);
+    }
+
+    aboutLeadFrameId = requestAnimationFrame(() => {
+      aboutLeadFrameId = null;
+      aboutLead.classList.remove("is-line-animated");
+      aboutLead.textContent = aboutLeadText;
+
+      if (prefersReducedMotion.matches) return;
+
+      const words = aboutLeadText.split(" ");
+      const measureFragment = document.createDocumentFragment();
+
+      words.forEach((word, index) => {
+        const wordSpan = document.createElement("span");
+        wordSpan.textContent = index === words.length - 1 ? word : `${word} `;
+        measureFragment.appendChild(wordSpan);
+      });
+
+      aboutLead.textContent = "";
+      aboutLead.appendChild(measureFragment);
+
+      const lineGroups = [];
+      let currentTop = null;
+      let currentWords = [];
+
+      Array.from(aboutLead.children).forEach((wordSpan) => {
+        const top = Math.round(wordSpan.getBoundingClientRect().top);
+
+        if (currentTop === null || Math.abs(top - currentTop) <= 1) {
+          currentTop = currentTop ?? top;
+          currentWords.push(wordSpan.textContent);
+          return;
+        }
+
+        lineGroups.push(currentWords.join("").trimEnd());
+        currentTop = top;
+        currentWords = [wordSpan.textContent];
+      });
+
+      if (currentWords.length > 0) {
+        lineGroups.push(currentWords.join("").trimEnd());
+      }
+
+      aboutLead.textContent = "";
+
+      lineGroups.forEach((line, index) => {
+        const lineSpan = document.createElement("span");
+        lineSpan.className = "leadLine";
+        lineSpan.style.setProperty("--line-index", index);
+        lineSpan.textContent = line;
+        aboutLead.appendChild(lineSpan);
+      });
+
+      // Restart the CSS animation after the measured line DOM is in place.
+      void aboutLead.offsetWidth;
+      aboutLead.classList.add("is-line-animated");
+    });
+  }
+
   function setTab(id, { updateHash = true } = {}) {
     tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
 
@@ -1226,6 +1294,7 @@
     if (id === "about") {
       requestAnimationFrame(() => {
         window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
+        animateAboutLead();
       });
     }
 

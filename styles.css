@@ -575,6 +575,11 @@ html.theme-crossfade body::before {
   .pane.is-active {
     animation: none;
   }
+  .lead.is-line-animated .leadLine {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
   .tabIndicator {
     transition: none;
   }
@@ -629,6 +634,21 @@ html.theme-crossfade body::before {
   margin: 0 0 14px;
   color: var(--muted);
   line-height: 1.6;
+}
+
+.lead.is-line-animated .leadLine {
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: leadLineIn 680ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(260ms + var(--line-index, 0) * 260ms);
+}
+
+@keyframes leadLineIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .grid2 {
