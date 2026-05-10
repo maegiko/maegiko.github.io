@@ -1301,21 +1301,22 @@
       block.style.setProperty("--resume-index", index);
     });
 
-    requestAnimationFrame(() => {
-      resumeBlocks.forEach((block) => {
-        void block.offsetWidth;
-        block.classList.add("is-resume-entering");
-      });
+    if (resumeBlocks.length > 0) {
+      void resumeBlocks[0].offsetWidth;
+    }
 
-      const totalDuration = 260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
-      resumeAnimationTimeout = window.setTimeout(() => {
-        resumeAnimationTimeout = null;
-        resumeBlocks.forEach((block) => {
-          block.classList.remove("is-resume-entering");
-          block.style.removeProperty("--resume-index");
-        });
-      }, totalDuration + 80);
+    resumeBlocks.forEach((block) => {
+      block.classList.add("is-resume-entering");
     });
+
+    const totalDuration = 260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
+    resumeAnimationTimeout = window.setTimeout(() => {
+      resumeAnimationTimeout = null;
+      resumeBlocks.forEach((block) => {
+        block.classList.remove("is-resume-entering");
+        block.style.removeProperty("--resume-index");
+      });
+    }, totalDuration + 80);
   }
 
   function animateProjectCards() {
@@ -1334,21 +1335,22 @@
       project.style.setProperty("--project-index", index);
     });
 
-    requestAnimationFrame(() => {
-      visibleProjects.forEach((project) => {
-        void project.offsetWidth;
-        project.classList.add("is-project-entering");
-      });
+    if (visibleProjects.length > 0) {
+      void visibleProjects[0].offsetWidth;
+    }
 
-      const totalDuration = 260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
-      projectAnimationTimeout = window.setTimeout(() => {
-        projectAnimationTimeout = null;
-        visibleProjects.forEach((project) => {
-          project.classList.remove("is-project-entering");
-          project.style.removeProperty("--project-index");
-        });
-      }, totalDuration + 80);
+    visibleProjects.forEach((project) => {
+      project.classList.add("is-project-entering");
     });
+
+    const totalDuration = 260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
+    projectAnimationTimeout = window.setTimeout(() => {
+      projectAnimationTimeout = null;
+      visibleProjects.forEach((project) => {
+        project.classList.remove("is-project-entering");
+        project.style.removeProperty("--project-index");
+      });
+    }, totalDuration + 80);
   }
 
   function setTab(id, { updateHash = true } = {}) {
@@ -1365,11 +1367,11 @@
     }
 
     if (id === "projects") {
-      requestAnimationFrame(animateProjectCards);
+      animateProjectCards();
     }
 
     if (id === "resume") {
-      requestAnimationFrame(animateResumeBlocks);
+      animateResumeBlocks();
     }
 
     if (updateHash) {
