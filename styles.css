@@ -6,9 +6,12 @@
   --bg1: #121212;
 
   /* Neutral liquid-glass palette (dark) */
-  --glassA: rgba(255, 255, 255, 0.075);
-  --glassB: rgba(255, 255, 255, 0.045);
-  --glassC: rgba(255, 255, 255, 0.03);
+  --glassA: rgba(38, 38, 38, 0.92);
+  --glassB: rgba(28, 28, 28, 0.88);
+  --glassC: rgba(18, 18, 18, 0.84);
+  --panelA: rgba(68, 68, 68, 0.9);
+  --panelB: rgba(50, 50, 50, 0.88);
+  --panelC: rgba(32, 32, 32, 0.86);
   --stroke: rgba(255, 255, 255, 0.14);
   --stroke2: rgba(255, 255, 255, 0.1);
   --shine: rgba(255, 255, 255, 0.1);
@@ -38,9 +41,12 @@
   --bg1: #f6f7f9;
 
   /* Light glass surfaces (slightly denser than pure white) */
-  --glassA: rgba(255, 255, 255, 0.78);
-  --glassB: rgba(255, 255, 255, 0.68);
-  --glassC: rgba(255, 255, 255, 0.58);
+  --glassA: rgba(255, 255, 255, 0.94);
+  --glassB: rgba(248, 249, 251, 0.91);
+  --glassC: rgba(238, 240, 244, 0.88);
+  --panelA: rgba(255, 255, 255, 0.95);
+  --panelB: rgba(248, 249, 251, 0.92);
+  --panelC: rgba(238, 240, 244, 0.9);
 
   /* Strokes */
   --stroke: rgba(0, 0, 0, 0.1);
@@ -210,7 +216,7 @@ html.theme-crossfade body::before {
       rgba(255, 255, 255, 0.1),
       transparent 62%
     ),
-    linear-gradient(180deg, var(--glassA), var(--glassB) 55%, var(--glassC));
+    linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
   border-radius: 20px;
   padding: 14px;
   box-shadow: var(--shadow2);
@@ -471,12 +477,10 @@ html.theme-crossfade body::before {
   from {
     opacity: 0;
     transform: translateY(8px);
-    filter: blur(1.5px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
@@ -504,7 +508,6 @@ html.theme-crossfade body::before {
   .project::after,
   .projectModalCard::after {
     animation: none;
-    will-change: auto;
   }
   .bgCanvas {
     opacity: 0.55;
@@ -557,7 +560,7 @@ html.theme-crossfade body::before {
       rgba(255, 255, 255, 0.1),
       transparent 62%
     ),
-    linear-gradient(180deg, var(--glassA), var(--glassB) 55%, var(--glassC));
+    linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
   border-radius: var(--radius2);
   padding: 14px;
   box-shadow: var(--shadow2);
@@ -622,12 +625,17 @@ html.theme-crossfade body::before {
 .tDot {
   width: 10px;
   height: 10px;
+  min-width: 10px;
+  flex: 0 0 10px;
+  aspect-ratio: 1;
   margin-top: 6px;
   border-radius: 999px;
   background: var(--accent);
   box-shadow:
     0 0 0 3px var(--accent-glow),
     /* outer soft ring */ 0 0 16px var(--accent); /* glow */
+  animation: tDotBreathe 1.6s ease-in-out infinite;
+  transform-origin: center;
 }
 :root.light .tDot {
   background: var(--accent);
@@ -712,12 +720,17 @@ html.theme-crossfade body::before {
 .t2Dot {
   width: 10px;
   height: 10px;
+  min-width: 10px;
+  flex: 0 0 10px;
+  aspect-ratio: 1;
   border-radius: 999px;
   background: var(--accent);
   box-shadow:
     0 0 0 4px var(--accent-glow),
     /* soft halo */ 0 0 18px var(--accent); /* glow */
   margin-top: 6px;
+  animation: tDotBreathe 1.6s ease-in-out infinite;
+  transform-origin: center;
 }
 
 :root.light .t2Dot {
@@ -748,7 +761,7 @@ html.theme-crossfade body::before {
 
 .t2Card {
   border: 1px solid var(--stroke2);
-  background: rgba(255, 255, 255, 0.028);
+  background: rgba(60, 60, 60, 0.76);
   border-radius: 14px;
   padding: 12px;
 }
@@ -860,6 +873,10 @@ html.theme-crossfade body::before {
   flex-wrap: wrap;
 }
 .filter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
   border: 1px solid var(--stroke2);
   background: rgba(255, 255, 255, 0.035);
   color: var(--muted);
@@ -889,7 +906,7 @@ html.theme-crossfade body::before {
       rgba(255, 255, 255, 0.1),
       transparent 62%
     ),
-    linear-gradient(180deg, var(--glassA), var(--glassB) 55%, var(--glassC));
+    linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
   border-radius: var(--radius2);
   padding: 14px;
   box-shadow: var(--shadow2);
@@ -913,7 +930,13 @@ html.theme-crossfade body::before {
 }
 .project:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.05);
+  background:
+    radial-gradient(
+      700px 220px at 25% 0%,
+      rgba(255, 255, 255, 0.12),
+      transparent 62%
+    ),
+    linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
 }
 .project:focus-within {
   outline: none;
@@ -992,12 +1015,10 @@ html.theme-crossfade body::before {
 .projectModalBackdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.58);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.78);
 }
 :root.light .projectModalBackdrop {
-  background: rgba(246, 247, 249, 0.66);
+  background: rgba(246, 247, 249, 0.82);
 }
 .projectModalCard {
   position: relative;
@@ -1086,18 +1107,23 @@ html.theme-crossfade body::before {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: rgba(0, 0, 0, 0.38);
+  background: rgba(0, 0, 0, 0.54);
 }
 .modalProjectImageBg {
   position: absolute;
-  inset: -18px;
-  width: calc(100% + 36px);
-  height: calc(100% + 36px);
+  inset: -28px;
+  width: calc(100% + 56px);
+  height: calc(100% + 56px);
   display: block;
   object-fit: cover;
-  filter: blur(18px) saturate(0.9) brightness(0.46);
-  opacity: 0.58;
-  transform: scale(1.04);
+  opacity: 0.46;
+  transform: scale(1.08);
+  image-rendering: auto;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.modalProjectImageBg.is-loaded {
+  opacity: 0.46;
 }
 :root.light .modalProjectImageWrap::after {
   background:
@@ -1109,8 +1135,10 @@ html.theme-crossfade body::before {
     rgba(255, 255, 255, 0.12);
 }
 :root.light .modalProjectImageBg {
-  filter: blur(18px) saturate(1.18) brightness(0.92);
-  opacity: 0.72;
+  opacity: 0;
+}
+:root.light .modalProjectImageBg.is-loaded {
+  opacity: 0.54;
 }
 .modalProjectImage {
   position: relative;
@@ -1120,6 +1148,11 @@ html.theme-crossfade body::before {
   display: block;
   object-fit: contain;
   object-position: center;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.modalProjectImage.is-loaded {
+  opacity: 1;
 }
 .modalProjectBody {
   position: relative;
@@ -1223,9 +1256,6 @@ textarea:focus {
 .tag,
 .t2Tag,
 .filter {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
   background:
     radial-gradient(
       140% 140% at 30% 20%,
@@ -1234,15 +1264,15 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.06),
-      rgba(255, 255, 255, 0.015)
+      rgba(82, 82, 82, 0.94),
+      rgba(58, 58, 58, 0.9)
     );
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 2px 6px rgba(0, 0, 0, 0.25);
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 2px 6px rgba(0, 0, 0, 0.28);
 
   transition:
     transform 0.12s ease,
@@ -1260,10 +1290,10 @@ textarea:focus {
   border-radius: inherit;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.24),
     rgba(255, 255, 255, 0)
   );
-  opacity: 0.22;
+  opacity: 0.3;
   pointer-events: none;
   z-index: 0;
 }
@@ -1283,8 +1313,6 @@ textarea:focus {
   --magnetX: 0px;
   --magnetY: 0px;
   --magnetGlow: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 
   background:
     radial-gradient(
@@ -1294,8 +1322,8 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.06),
-      rgba(255, 255, 255, 0.015)
+      rgba(58, 58, 58, 0.94),
+      rgba(34, 34, 34, 0.9)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1376,9 +1404,6 @@ textarea:focus {
 }
 
 .sideRole {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
   background:
     radial-gradient(
       140% 140% at 30% 20%,
@@ -1387,8 +1412,8 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.01)
+      rgba(58, 58, 58, 0.94),
+      rgba(34, 34, 34, 0.9)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1473,7 +1498,6 @@ html.preload .card.side,
 html.preload .socialRow {
   opacity: 0;
   transform: translateY(10px);
-  filter: blur(1.5px);
 }
 
 html.loaded .sideTile,
@@ -1517,12 +1541,10 @@ html.loaded .card.main {
   from {
     opacity: 0;
     transform: translateY(10px);
-    filter: blur(1.5px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
@@ -1534,19 +1556,16 @@ html.loaded .card.main {
   html.preload .card.side {
     opacity: 1;
     transform: none;
-    filter: none;
   }
   html.loaded .sideTile,
   html.loaded .card.main,
   html.loaded .sideTile,
   html.loaded .card.side,
-  html.loaded .socialRow {
+  html.loaded .socialRow,
+  .tDot,
+  .t2Dot {
     animation: none;
   }
-}
-
-.tDot {
-  animation: tDotBreathe 1.6s ease-in-out infinite;
 }
 
 @keyframes tDotBreathe {
@@ -1557,10 +1576,6 @@ html.loaded .card.main {
   50% {
     transform: scale(1.15);
   }
-}
-
-.t2Dot {
-  animation: tDotBreathe 1.6s ease-in-out infinite;
 }
 
 @media (max-width: 431px) {
@@ -1583,6 +1598,7 @@ html.loaded .card.main {
 :root.light .filter,
 :root.light .tag,
 :root.light .t2Tag,
+:root.light .sideRole,
 :root.light .contactTile,
 :root.light .cIcon,
 :root.light input,
@@ -1602,13 +1618,27 @@ html.loaded .card.main {
   background: var(--surfaceHover);
 }
 
+:root.light .sideRole {
+  background:
+    radial-gradient(
+      140% 140% at 30% 20%,
+      rgba(255, 255, 255, 0.72),
+      transparent 48%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(0, 0, 0, 0.045));
+  color: rgba(20, 20, 22, 0.68);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 /* Light mode: pill/tabs glass gradients should be neutral (not white-on-white) */
 
 :root.light .tab,
 :root.light .tag,
 :root.light .t2Tag,
 :root.light .filter,
-:root.light .sideRole,
 :root.light .modalClose {
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow:
@@ -1616,11 +1646,15 @@ html.loaded .card.main {
     0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Light mode: make the card gradients show up more (two-corner lighting) */
+:root.light .sideRole {
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
 :root.light .card,
-:root.light .sideTile,
-:root.light .tile,
-:root.light .project,
 :root.light .projectModalCard {
   background:
     radial-gradient(
@@ -1636,15 +1670,29 @@ html.loaded .card.main {
     linear-gradient(180deg, var(--glassA), var(--glassB) 55%, var(--glassC));
 }
 
-/* Big surfaces should actually blur (glass effect) */
+:root.light .sideTile,
+:root.light .tile,
+:root.light .project {
+  background:
+    radial-gradient(
+      900px 360px at 20% 0%,
+      rgba(255, 255, 255, 0.85),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 360px at 90% 25%,
+      rgba(0, 0, 0, 0.06),
+      transparent 60%
+    ),
+    linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
+}
+
 .card,
 .sideTile,
 .tile,
 .project,
 .projectModalCard {
   isolation: isolate;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 }
 
 .card > *,
@@ -1661,23 +1709,22 @@ html.loaded .card.main {
 .project::before {
   content: "";
   position: absolute;
-  inset: -35%;
+  inset: -40%;
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
   background: linear-gradient(
     115deg,
-    transparent 32%,
-    rgba(255, 255, 255, 0.035) 42%,
-    rgba(255, 255, 255, 0.105) 50%,
-    rgba(255, 255, 255, 0.035) 58%,
-    transparent 68%
+    transparent 34%,
+    rgba(255, 255, 255, 0.035) 43%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0.035) 57%,
+    transparent 66%
   );
-  opacity: 0.48;
-  transform: translate3d(-18%, 0, 0);
-  animation: glassShimmerDrift var(--shimmerDuration, 22s) ease-in-out infinite
-    alternate;
-  will-change: transform;
+  opacity: 0.44;
+  transform: translate3d(-26%, 0, 0);
+  animation: glassShimmerDrift var(--shimmerDuration, 16s)
+    cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
 
 :root.light .card::before,
@@ -1686,13 +1733,13 @@ html.loaded .card.main {
 :root.light .project::before {
   background: linear-gradient(
     115deg,
-    transparent 32%,
-    rgba(255, 255, 255, 0.12) 42%,
-    rgba(255, 255, 255, 0.36) 50%,
-    rgba(255, 255, 255, 0.12) 58%,
-    transparent 68%
+    transparent 34%,
+    rgba(255, 255, 255, 0.08) 43%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.08) 57%,
+    transparent 66%
   );
-  opacity: 0.36;
+  opacity: 0.32;
 }
 
 .card.main {
@@ -1711,10 +1758,10 @@ html.loaded .card.main {
 
 @keyframes glassShimmerDrift {
   from {
-    transform: translate3d(-18%, 0, 0);
+    transform: translate3d(-26%, 0, 0);
   }
   to {
-    transform: translate3d(18%, 0, 0);
+    transform: translate3d(26%, 0, 0);
   }
 }
 
@@ -1722,15 +1769,6 @@ html.loaded .card.main {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
-}
-
-:root.light .card,
-:root.light .sideTile,
-:root.light .tile,
-:root.light .project,
-:root.light .projectModalCard {
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
 .card::after {
@@ -1813,8 +1851,6 @@ html.loaded .card.main {
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     mask-composite: exclude;
-    animation: borderGlowOrbit var(--orbitDuration, 30s) linear infinite;
-    will-change: --orbitAngle;
   }
 
   .card::after {
@@ -1895,87 +1931,6 @@ html.loaded .card.main {
   box-shadow:
     inset 0 0.5px 0 rgba(255, 255, 255, 0.22),
     0 4px 10px rgba(106, 106, 106, 0.32);
-}
-
-html.chrome-mac .card,
-html.chrome-mac .sideTile,
-html.chrome-mac .tile,
-html.chrome-mac .project,
-html.chrome-mac .projectModalCard,
-html.chrome-mac .tag,
-html.chrome-mac .t2Tag,
-html.chrome-mac .filter,
-html.chrome-mac .tab,
-html.chrome-mac .projectModalBackdrop,
-html.performance-lite .card,
-html.performance-lite .sideTile,
-html.performance-lite .tile,
-html.performance-lite .project,
-html.performance-lite .projectModalCard,
-html.performance-lite .tag,
-html.performance-lite .t2Tag,
-html.performance-lite .filter,
-html.performance-lite .tab,
-html.performance-lite .projectModalBackdrop {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-html.chrome-mac .modalProjectImageBg,
-html.performance-lite .modalProjectImageBg {
-  filter: none;
-  opacity: 0.34;
-}
-
-html.chrome-mac .pane.is-active,
-html.chrome-mac.loaded .sideTile,
-html.chrome-mac.loaded .card.main,
-html.chrome-mac.loaded .card.side,
-html.chrome-mac.loaded .socialRow,
-html.performance-lite .pane.is-active,
-html.performance-lite.loaded .sideTile,
-html.performance-lite.loaded .card.main,
-html.performance-lite.loaded .card.side,
-html.performance-lite.loaded .socialRow {
-  filter: none;
-}
-
-html.performance-lite .pane.is-active {
-  animation-name: paneInLite;
-}
-
-@keyframes paneInLite {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-html.performance-lite .card::before,
-html.performance-lite .sideTile::before,
-html.performance-lite .tile::before,
-html.performance-lite .project::before {
-  animation: none;
-  transform: translate3d(0, 0, 0);
-  will-change: auto;
-}
-
-html.performance-lite .card::after,
-html.performance-lite .sideTile::after,
-html.performance-lite .tile::after,
-html.performance-lite .project::after,
-html.performance-lite .projectModalCard::after {
-  animation: none;
-  will-change: auto;
-}
-
-html.performance-lite .tab > b {
-  transform: none;
-  transition: none;
 }
 
 #asciiCanvas {

@@ -13,27 +13,6 @@
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   );
-  const prefersReducedData = window.matchMedia?.(
-    "(prefers-reduced-data: reduce)",
-  );
-  const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
-  const lowCoreCount =
-    typeof navigator.hardwareConcurrency === "number" &&
-    navigator.hardwareConcurrency <= 4;
-  const lowMemory =
-    typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
-  const dataSaver = navigator.connection?.saveData === true;
-  const performanceLite =
-    prefersReducedMotion.matches ||
-    prefersReducedData?.matches ||
-    dataSaver ||
-    lowCoreCount ||
-    lowMemory ||
-    isCoarsePointer;
-
-  if (performanceLite) {
-    root.classList.add("performance-lite");
-  }
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
@@ -68,6 +47,8 @@
   const modalText = document.getElementById("modalProjectText");
   const modalTags = document.getElementById("modalProjectTags");
   let lastFocusedElement = null;
+  const blurredImageCache = new Map();
+  let modalImageRequestId = 0;
 
   const iconSvgs = {
     api: `
@@ -462,8 +443,6 @@
     let assemblyUntil = 0;
     let revealFrameId = null;
     const reduceMotion = prefersReducedMotion;
-    const frameInterval = performanceLite ? 1000 / 30 : 0;
-    let lastFrameTime = 0;
 
     class Particle {
       constructor(x, y, char, color, brightness) {
@@ -627,7 +606,7 @@
 
       width = Math.max(1, Math.round(rect.width));
       height = Math.max(1, Math.round(width / imageRatio));
-      dpr = Math.min(window.devicePixelRatio || 1, performanceLite ? 1.25 : 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
       canvas.style.height = `${height}px`;
       canvas.width = Math.floor(width * dpr);
@@ -679,7 +658,7 @@
       offCtx.drawImage(image, 0, 0, width, height);
 
       const pixels = offCtx.getImageData(0, 0, width, height).data;
-      const gap = Math.max(performanceLite ? 4 : 3, Math.round(width / 50));
+      const gap = Math.max(3, Math.round(width / 50));
 
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -750,13 +729,7 @@
       });
     }
 
-    function animate(time = 0) {
-      if (frameInterval && time - lastFrameTime < frameInterval) {
-        frameId = requestAnimationFrame(animate);
-        return;
-      }
-
-      lastFrameTime = time;
+    function animate() {
       ctx.clearRect(0, 0, width, height);
       ctx.font = `${Math.max(7, Math.round(width / 38))}px monospace`;
       ctx.textBaseline = "middle";
@@ -845,7 +818,6 @@
 
   function setupStarfield() {
     if (!backgroundLayer) return;
-    if (performanceLite) return;
 
     const desktopStarfield = window.matchMedia("(min-width: 721px)");
     if (!desktopStarfield.matches) return;
@@ -867,6 +839,7 @@
       vx: 0,
       vy: 0,
       active: false,
+      lastMove: 0,
     };
     let width = 0;
     let height = 0;
@@ -878,8 +851,8 @@
     function createStars() {
       const area = width * height;
       const count = isChromeMac
-        ? Math.max(32, Math.min(68, Math.floor(area / 24000)))
-        : Math.max(42, Math.min(110, Math.floor(area / 15000)));
+        ? Math.max(32, Math.min(60, Math.floor(area / 26000)))
+        : Math.max(38, Math.min(82, Math.floor(area / 20000)));
 
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * width,
@@ -897,7 +870,7 @@
     }
 
     function resizeStarfield() {
-      dpr = Math.min(window.devicePixelRatio || 1, isChromeMac ? 1.25 : 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.floor(width * dpr);
@@ -941,10 +914,9 @@
 
         if (distance < radius && distance > 0.01) {
           const force = (1 - distance / radius) ** 2;
-          const strength = 1.8;
 
-          star.vx += pointer.vx * force * 0.015 * star.depth;
-          star.vy += pointer.vy * force * 0.015 * star.depth;
+          star.vx += pointer.vx * force * 0.014 * star.depth;
+          star.vy += pointer.vy * force * 0.014 * star.depth;
         }
       }
 
@@ -1035,7 +1007,22 @@
 
       stars.forEach((star) => drawStar(star, time));
 
-      if (!reduceMotion.matches) {
+      const moving = stars.some(
+        (star) => Math.abs(star.vx) + Math.abs(star.vy) > 0.025,
+      );
+      const pointerFresh = performance.now() - pointer.lastMove < 220;
+
+      if (!reduceMotion.matches && (pointerFresh || moving)) {
+        frameId = requestAnimationFrame(renderStarfield);
+        return;
+      }
+
+      pointer.active = false;
+      frameId = null;
+    }
+
+    function requestStarfieldRender() {
+      if (frameId === null) {
         frameId = requestAnimationFrame(renderStarfield);
       }
     }
@@ -1044,7 +1031,7 @@
       if (frameId) cancelAnimationFrame(frameId);
       frameId = null;
       resizeStarfield();
-      renderStarfield();
+      requestStarfieldRender();
     });
     window.addEventListener("pointermove", (event) => {
       const nextVx = event.clientX - pointer.prevX;
@@ -1052,13 +1039,14 @@
 
       pointer.vx = pointer.vx * 0.75 + nextVx * 0.25;
       pointer.vy = pointer.vy * 0.75 + nextVy * 0.25;
-
       pointer.prevX = event.clientX;
       pointer.prevY = event.clientY;
-
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       pointer.active = true;
+      pointer.lastMove = performance.now();
+
+      requestStarfieldRender();
     });
     window.addEventListener("pointerleave", () => {
       pointer.active = false;
@@ -1068,7 +1056,7 @@
     reduceMotion.addEventListener("change", () => {
       if (frameId) cancelAnimationFrame(frameId);
       frameId = null;
-      renderStarfield();
+      requestStarfieldRender();
     });
     desktopStarfield.addEventListener("change", () => {
       if (desktopStarfield.matches) return;
@@ -1078,7 +1066,7 @@
     });
 
     resizeStarfield();
-    renderStarfield();
+    requestStarfieldRender();
   }
 
   function getSavedTheme() {
@@ -1098,7 +1086,7 @@
   }
 
   function playThemeCrossfade() {
-    if (prefersReducedMotion.matches || performanceLite) return;
+    if (prefersReducedMotion.matches) return;
 
     root.classList.remove("theme-crossfade");
     root.style.setProperty(
@@ -1205,7 +1193,7 @@
   tabs.forEach((t) => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
   function setupMagneticTabs() {
-    if (prefersReducedMotion.matches || performanceLite) return;
+    if (prefersReducedMotion.matches) return;
 
     const strength = 0.16;
     const maxShift = 4;
@@ -1363,8 +1351,62 @@
     });
   }
 
+  function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = src;
+    });
+  }
+
+  async function createBlurredImage(src, requestId) {
+    if (!modalImageBg) return;
+
+    const cached = blurredImageCache.get(src);
+    if (cached) {
+      modalImageBg.src = cached;
+      modalImageBg.classList.add("is-loaded");
+      return;
+    }
+
+    try {
+      const image = await preloadImage(src);
+      if (requestId !== modalImageRequestId) return;
+
+      const width = 96;
+      const height = Math.max(
+        1,
+        Math.round(width * (image.naturalHeight / image.naturalWidth)),
+      );
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) return;
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.filter = "blur(8px) saturate(0.9) brightness(0.7)";
+      ctx.drawImage(image, -8, -8, width + 16, height + 16);
+
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.68);
+      blurredImageCache.set(src, dataUrl);
+
+      if (modalImageBg.dataset.source === src) {
+        modalImageBg.src = dataUrl;
+        modalImageBg.classList.add("is-loaded");
+      }
+    } catch {
+      if (requestId !== modalImageRequestId) return;
+      modalImageBg.src = src;
+      modalImageBg.classList.add("is-loaded");
+    }
+  }
+
   function openProjectModal(project) {
     if (!projectModal || !modalCard) return;
+    const requestId = ++modalImageRequestId;
 
     const title = project.querySelector(".projTitle")?.textContent.trim() || "";
     const fallbackText =
@@ -1378,11 +1420,15 @@
     if (modalTitle) modalTitle.textContent = title;
     if (modalText) modalText.textContent = description;
     if (modalImage) {
-      modalImage.src = image;
       modalImage.alt = `${title} project preview`;
+      modalImage.classList.remove("is-loaded");
+      modalImage.removeAttribute("src");
     }
     if (modalImageBg) {
-      modalImageBg.src = image;
+      modalImageBg.dataset.source = image;
+      modalImageBg.classList.remove("is-loaded");
+      modalImageBg.removeAttribute("src");
+      createBlurredImage(image, requestId);
     }
     modalCard.style.setProperty(
       "--modalImageAccent",
@@ -1398,10 +1444,28 @@
     pageShell?.setAttribute("inert", "");
     document.body.classList.add("modal-open");
     modalCard.focus();
+
+    preloadImage(image)
+      .then(async (loadedImage) => {
+        if (requestId !== modalImageRequestId || !modalImage) return;
+        modalImage.src = loadedImage.src;
+        if (modalImage.decode) {
+          await modalImage.decode().catch(() => {});
+        }
+        if (requestId === modalImageRequestId) {
+          modalImage.classList.add("is-loaded");
+        }
+      })
+      .catch(() => {
+        if (requestId !== modalImageRequestId || !modalImage) return;
+        modalImage.src = image;
+        modalImage.classList.add("is-loaded");
+      });
   }
 
   function closeProjectModal() {
     if (!projectModal) return;
+    modalImageRequestId += 1;
 
     projectModal.classList.remove("is-open");
     projectModal.setAttribute("aria-hidden", "true");
