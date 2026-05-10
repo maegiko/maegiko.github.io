@@ -420,8 +420,9 @@ html.theme-crossfade body::before {
 
 .top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
   padding: 10px 10px 12px;
   border-bottom: 1px solid var(--line);
 }
@@ -508,6 +509,29 @@ html.theme-crossfade body::before {
   justify-content: center;
   line-height: 1;
 }
+
+.topActions {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+#themeToggle {
+  width: 37px;
+  height: 37px;
+  padding: 0;
+  border-radius: 14px;
+  transform: none;
+}
+
+#themeToggle:hover {
+  transform: translateY(-1px);
+}
+
+#themeToggle:active {
+  transform: translateY(0);
+}
+
 .themeIcon {
   display: block;
 }
