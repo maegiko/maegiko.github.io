@@ -1906,12 +1906,23 @@ html.chrome-mac .tag,
 html.chrome-mac .t2Tag,
 html.chrome-mac .filter,
 html.chrome-mac .tab,
-html.chrome-mac .projectModalBackdrop {
+html.chrome-mac .projectModalBackdrop,
+html.performance-lite .card,
+html.performance-lite .sideTile,
+html.performance-lite .tile,
+html.performance-lite .project,
+html.performance-lite .projectModalCard,
+html.performance-lite .tag,
+html.performance-lite .t2Tag,
+html.performance-lite .filter,
+html.performance-lite .tab,
+html.performance-lite .projectModalBackdrop {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
-html.chrome-mac .modalProjectImageBg {
+html.chrome-mac .modalProjectImageBg,
+html.performance-lite .modalProjectImageBg {
   filter: none;
   opacity: 0.34;
 }
@@ -1920,8 +1931,51 @@ html.chrome-mac .pane.is-active,
 html.chrome-mac.loaded .sideTile,
 html.chrome-mac.loaded .card.main,
 html.chrome-mac.loaded .card.side,
-html.chrome-mac.loaded .socialRow {
+html.chrome-mac.loaded .socialRow,
+html.performance-lite .pane.is-active,
+html.performance-lite.loaded .sideTile,
+html.performance-lite.loaded .card.main,
+html.performance-lite.loaded .card.side,
+html.performance-lite.loaded .socialRow {
   filter: none;
+}
+
+html.performance-lite .pane.is-active {
+  animation-name: paneInLite;
+}
+
+@keyframes paneInLite {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html.performance-lite .card::before,
+html.performance-lite .sideTile::before,
+html.performance-lite .tile::before,
+html.performance-lite .project::before {
+  animation: none;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+html.performance-lite .card::after,
+html.performance-lite .sideTile::after,
+html.performance-lite .tile::after,
+html.performance-lite .project::after,
+html.performance-lite .projectModalCard::after {
+  animation: none;
+  will-change: auto;
+}
+
+html.performance-lite .tab > b {
+  transform: none;
+  transition: none;
 }
 
 #asciiCanvas {

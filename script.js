@@ -10,6 +10,31 @@
     root.classList.add("chrome-mac");
   }
 
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  );
+  const prefersReducedData = window.matchMedia?.(
+    "(prefers-reduced-data: reduce)",
+  );
+  const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+  const lowCoreCount =
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+  const lowMemory =
+    typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
+  const dataSaver = navigator.connection?.saveData === true;
+  const performanceLite =
+    prefersReducedMotion.matches ||
+    prefersReducedData?.matches ||
+    dataSaver ||
+    lowCoreCount ||
+    lowMemory ||
+    isCoarsePointer;
+
+  if (performanceLite) {
+    root.classList.add("performance-lite");
+  }
+
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       root.classList.remove("preload");
@@ -436,7 +461,9 @@
     let frameId = null;
     let assemblyUntil = 0;
     let revealFrameId = null;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduceMotion = prefersReducedMotion;
+    const frameInterval = performanceLite ? 1000 / 30 : 0;
+    let lastFrameTime = 0;
 
     class Particle {
       constructor(x, y, char, color, brightness) {
@@ -600,7 +627,7 @@
 
       width = Math.max(1, Math.round(rect.width));
       height = Math.max(1, Math.round(width / imageRatio));
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, performanceLite ? 1.25 : 2);
 
       canvas.style.height = `${height}px`;
       canvas.width = Math.floor(width * dpr);
@@ -652,7 +679,7 @@
       offCtx.drawImage(image, 0, 0, width, height);
 
       const pixels = offCtx.getImageData(0, 0, width, height).data;
-      const gap = Math.max(3, Math.round(width / 50));
+      const gap = Math.max(performanceLite ? 4 : 3, Math.round(width / 50));
 
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -723,7 +750,13 @@
       });
     }
 
-    function animate() {
+    function animate(time = 0) {
+      if (frameInterval && time - lastFrameTime < frameInterval) {
+        frameId = requestAnimationFrame(animate);
+        return;
+      }
+
+      lastFrameTime = time;
       ctx.clearRect(0, 0, width, height);
       ctx.font = `${Math.max(7, Math.round(width / 38))}px monospace`;
       ctx.textBaseline = "middle";
@@ -732,11 +765,11 @@
         .getPropertyValue("--ascii-color")
         .trim();
 
-      const time = performance.now();
+      const now = performance.now();
 
       for (const particle of particles) {
         particle.color = particleColor;
-        particle.update(time);
+        particle.update(now);
         particle.draw();
       }
 
@@ -812,6 +845,7 @@
 
   function setupStarfield() {
     if (!backgroundLayer) return;
+    if (performanceLite) return;
 
     const desktopStarfield = window.matchMedia("(min-width: 721px)");
     if (!desktopStarfield.matches) return;
@@ -824,7 +858,7 @@
     canvas.setAttribute("aria-hidden", "true");
     backgroundLayer.appendChild(canvas);
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduceMotion = prefersReducedMotion;
     const pointer = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
@@ -1064,7 +1098,7 @@
   }
 
   function playThemeCrossfade() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReducedMotion.matches || performanceLite) return;
 
     root.classList.remove("theme-crossfade");
     root.style.setProperty(
@@ -1171,7 +1205,7 @@
   tabs.forEach((t) => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
   function setupMagneticTabs() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReducedMotion.matches || performanceLite) return;
 
     const strength = 0.16;
     const maxShift = 4;
