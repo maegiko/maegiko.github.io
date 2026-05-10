@@ -1219,6 +1219,7 @@
 
   const aboutLead = document.querySelector("#about .lead");
   const aboutLeadText = aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
+  const resumeBlocks = document.querySelectorAll("#resume .resumeStack > .tile");
   let aboutLeadFrameId = null;
 
   function animateAboutLead() {
@@ -1285,6 +1286,71 @@
     });
   }
 
+  let projectAnimationTimeout = null;
+  let resumeAnimationTimeout = null;
+
+  function animateResumeBlocks() {
+    if (prefersReducedMotion.matches) return;
+
+    if (resumeAnimationTimeout !== null) {
+      window.clearTimeout(resumeAnimationTimeout);
+    }
+
+    resumeBlocks.forEach((block, index) => {
+      block.classList.remove("is-resume-entering");
+      block.style.setProperty("--resume-index", index);
+    });
+
+    requestAnimationFrame(() => {
+      resumeBlocks.forEach((block) => {
+        void block.offsetWidth;
+        block.classList.add("is-resume-entering");
+      });
+
+      const totalDuration = 260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
+      resumeAnimationTimeout = window.setTimeout(() => {
+        resumeAnimationTimeout = null;
+        resumeBlocks.forEach((block) => {
+          block.classList.remove("is-resume-entering");
+          block.style.removeProperty("--resume-index");
+        });
+      }, totalDuration + 80);
+    });
+  }
+
+  function animateProjectCards() {
+    if (prefersReducedMotion.matches) return;
+
+    if (projectAnimationTimeout !== null) {
+      window.clearTimeout(projectAnimationTimeout);
+    }
+
+    const visibleProjects = Array.from(projects).filter(
+      (project) => project.style.display !== "none",
+    );
+
+    visibleProjects.forEach((project, index) => {
+      project.classList.remove("is-project-entering");
+      project.style.setProperty("--project-index", index);
+    });
+
+    requestAnimationFrame(() => {
+      visibleProjects.forEach((project) => {
+        void project.offsetWidth;
+        project.classList.add("is-project-entering");
+      });
+
+      const totalDuration = 260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
+      projectAnimationTimeout = window.setTimeout(() => {
+        projectAnimationTimeout = null;
+        visibleProjects.forEach((project) => {
+          project.classList.remove("is-project-entering");
+          project.style.removeProperty("--project-index");
+        });
+      }, totalDuration + 80);
+    });
+  }
+
   function setTab(id, { updateHash = true } = {}) {
     tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
 
@@ -1296,6 +1362,14 @@
         window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
         animateAboutLead();
       });
+    }
+
+    if (id === "projects") {
+      requestAnimationFrame(animateProjectCards);
+    }
+
+    if (id === "resume") {
+      requestAnimationFrame(animateResumeBlocks);
     }
 
     if (updateHash) {
