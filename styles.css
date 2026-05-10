@@ -2125,7 +2125,7 @@ html.loaded .card.main {
   inset: -40%;
   z-index: 0;
   pointer-events: none;
-  border-radius: inherit;
+  border-radius: 0;
   background: linear-gradient(
     115deg,
     transparent 34%,
@@ -2477,6 +2477,13 @@ html.loaded .card.main {
 }
 
 @media (max-width: 720px) {
+  .card::before,
+  .sideTile::before,
+  .tile::before,
+  .project::before {
+    display: none;
+  }
+
   .card::after,
   .sideTile::after,
   .tile::after,
