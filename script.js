@@ -445,7 +445,15 @@
     const reduceMotion = prefersReducedMotion;
 
     class Particle {
-      constructor(x, y, char, color, brightness, isHairEdge = false) {
+      constructor(
+        x,
+        y,
+        char,
+        color,
+        brightness,
+        isHairParticle = false,
+        isHairEdge = false,
+      ) {
         this.x = x;
         this.y = y;
         this.originX = x;
@@ -455,6 +463,7 @@
         this.char = char;
         this.color = color;
         this.brightness = brightness;
+        this.isHairParticle = isHairParticle;
         this.isHairEdge = isHairEdge;
         this.opacity = 1;
         this.assembleStart = 0;
@@ -577,6 +586,16 @@
             0.32;
           drawX += wave * 0.45;
           drawY += wave;
+
+          if (this.isHairParticle) {
+            const heightFalloff = 1 - Math.min(1, this.originY / (height * 0.36));
+            const gust =
+              Math.sin(time * 0.0022 + this.originY * 0.08) * 0.85 +
+              Math.sin(time * 0.0011 + this.originX * 0.11) * 0.45;
+
+            drawX += gust * heightFalloff;
+            drawY += Math.sin(time * 0.0018 + this.originX * 0.09) * heightFalloff * 0.22;
+          }
         }
 
         if (isDark) {
@@ -655,7 +674,7 @@
     function isHairEdgePixel(x, y, pixel, pixels, gap) {
       const brightness = getBrightness(pixel);
 
-      if (brightness > 74 || y > height * 0.18) return false;
+      if (!isHairPixel(y, brightness) || y > height * 0.18) return false;
 
       const spotPattern = Math.abs(
         Math.sin(x * 12.9898 + y * 78.233) * 43758.5453,
@@ -670,6 +689,10 @@
         if (neighbor.a < 115) return true;
         return getBrightness(neighbor) - brightness > 54;
       });
+    }
+
+    function isHairPixel(y, brightness) {
+      return brightness <= 82 && y <= height * 0.42;
     }
 
     function imageToParticles({ assemble = false } = {}) {
@@ -697,6 +720,7 @@
 
           const brightness = getBrightness(pixel);
           if (brightness > 252) continue;
+          const isHairParticle = isHairPixel(y, brightness);
 
           const particle = new Particle(
             x,
@@ -704,6 +728,7 @@
             chooseAsciiChar(x, y, pixel, pixels, gap),
             "",
             brightness,
+            isHairParticle,
             isDark && isHairEdgePixel(x, y, pixel, pixels, gap),
           );
 
