@@ -1353,7 +1353,17 @@
     }, totalDuration + 80);
   }
 
+  const validTabIds = new Set(Array.from(panes, (pane) => pane.id));
+
+  function getRouteTabId() {
+    const id = location.hash.replace("#", "");
+    return validTabIds.has(id) ? id : "about";
+  }
+
   function setTab(id, { updateHash = true } = {}) {
+    if (!validTabIds.has(id)) return;
+
+    const currentTab = document.querySelector(".tab.is-active")?.dataset.tab;
     tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
 
     panes.forEach((p) => p.classList.toggle("is-active", p.id === id));
@@ -1374,8 +1384,8 @@
       animateResumeBlocks();
     }
 
-    if (updateHash) {
-      history.replaceState(null, "", `#${id}`);
+    if (updateHash && currentTab !== id) {
+      history.pushState(null, "", `#${id}`);
     }
   }
 
@@ -1450,8 +1460,6 @@
 
   setupMagneticTabs();
 
-  const hash = location.hash.replace("#", "");
-
   function keepInitialHashRouteAtTop(target) {
     const resetScroll = () => {
       window.scrollTo(0, 0);
@@ -1474,14 +1482,19 @@
     setTimeout(resetScroll, 80);
   }
 
-  const initialHashTarget = hash && document.getElementById(hash);
+  const initialTabId = getRouteTabId();
+  const initialHashTarget = location.hash && document.getElementById(initialTabId);
 
   if (initialHashTarget) {
-    setTab(hash, { updateHash: false });
+    setTab(initialTabId, { updateHash: false });
     keepInitialHashRouteAtTop(initialHashTarget);
   } else {
     setTab("about", { updateHash: false });
   }
+
+  window.addEventListener("popstate", () => {
+    setTab(getRouteTabId(), { updateHash: false });
+  });
 
   window.addEventListener("resize", updateTabIndicator);
   requestAnimationFrame(updateTabIndicator);
