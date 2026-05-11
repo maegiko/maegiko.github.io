@@ -445,7 +445,7 @@
     const reduceMotion = prefersReducedMotion;
 
     class Particle {
-      constructor(x, y, char, color, brightness) {
+      constructor(x, y, char, color, brightness, isHairEdge = false) {
         this.x = x;
         this.y = y;
         this.originX = x;
@@ -455,6 +455,7 @@
         this.char = char;
         this.color = color;
         this.brightness = brightness;
+        this.isHairEdge = isHairEdge;
         this.opacity = 1;
         this.assembleStart = 0;
         this.assembleDelay = 0;
@@ -594,6 +595,14 @@
         }
 
         ctx.fillText(this.char, drawX, drawY);
+
+        if (isDark && this.isHairEdge) {
+          ctx.save();
+          ctx.globalAlpha = 0.28 * this.opacity;
+          ctx.fillStyle = "rgba(248, 241, 220, 0.86)";
+          ctx.fillText(this.char, drawX, drawY);
+          ctx.restore();
+        }
       }
     }
 
@@ -643,6 +652,26 @@
       return chars[index];
     }
 
+    function isHairEdgePixel(x, y, pixel, pixels, gap) {
+      const brightness = getBrightness(pixel);
+
+      if (brightness > 74 || y > height * 0.18) return false;
+
+      const spotPattern = Math.abs(
+        Math.sin(x * 12.9898 + y * 78.233) * 43758.5453,
+      );
+
+      if (spotPattern % 1 > 0.38) return false;
+
+      const edgeDistance = Math.max(2, gap);
+      const neighbors = [getPixel(x, y - edgeDistance, pixels)];
+
+      return neighbors.some((neighbor) => {
+        if (neighbor.a < 115) return true;
+        return getBrightness(neighbor) - brightness > 54;
+      });
+    }
+
     function imageToParticles({ assemble = false } = {}) {
       if (!image.complete || width <= 1 || height <= 1) return;
 
@@ -675,6 +704,7 @@
             chooseAsciiChar(x, y, pixel, pixels, gap),
             "",
             brightness,
+            isDark && isHairEdgePixel(x, y, pixel, pixels, gap),
           );
 
           if (assemble) {
