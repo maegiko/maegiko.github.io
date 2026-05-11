@@ -1,6 +1,6 @@
 # Kenneth Koon Portfolio 👨‍💻
 
-This is my personal portfolio [site.](https://maegiko.github.io)
+This is my personal portfolio [site.](https://kennethkdev.com)
 
 ## About Me 🚀
 
