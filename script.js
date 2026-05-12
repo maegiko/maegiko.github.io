@@ -1331,7 +1331,7 @@
         const lineSpan = document.createElement("span");
         lineSpan.className = "leadLine";
         lineSpan.style.setProperty("--line-index", index);
-        lineSpan.textContent = line;
+        lineSpan.textContent = index === lineGroups.length - 1 ? line : `${line} `;
         aboutLead.appendChild(lineSpan);
       });
 
