@@ -808,7 +808,9 @@
       offCtx.drawImage(image, 0, 0, width, height);
 
       const pixels = offCtx.getImageData(0, 0, width, height).data;
-      const gap = Math.max(3, Math.round(width / 65));
+      const isCompactCanvas = width < 220;
+      const gapDensity = isCompactCanvas ? 50 : 65;
+      const gap = Math.max(3, Math.round(width / gapDensity));
 
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
