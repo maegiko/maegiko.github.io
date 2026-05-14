@@ -2511,10 +2511,23 @@ html.loaded .card.main {
     flex-wrap: nowrap;
   }
 
+  .about-me-content > div {
+    display: contents;
+  }
+
+  .about-me-content .h2 {
+    order: 1;
+  }
+
   #asciiCanvas {
     align-self: center;
     flex-basis: 180px;
+    order: 2;
     width: min(180px, 100%);
+  }
+
+  .about-me-content .lead {
+    order: 3;
   }
 }
 
