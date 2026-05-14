@@ -1374,7 +1374,7 @@
   }
 
   function updateThemeChrome(isLight) {
-    themeColorMeta?.setAttribute("content", isLight ? "#f6f7f9" : "#080a0f");
+    themeColorMeta?.setAttribute("content", isLight ? "#f6f7f9" : "#0b0e15");
   }
 
   // Theme: default dark; only set light if saved.
