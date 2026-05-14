@@ -2975,11 +2975,17 @@ html.loaded .card.main {
 
   .terminalPrompt {
     padding-right: 10px;
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .promptCursor {
     width: 7px;
+  }
+}
+
+@media (max-width: 455px) {
+  .terminalPrompt {
+    font-size: 10px;
   }
 }
 
