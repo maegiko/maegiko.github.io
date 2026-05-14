@@ -1686,6 +1686,66 @@
     setTimeout(resetScroll, 80);
   }
 
+  function setupDynamicCodeLineNumbers() {
+    const codeBlocks = document.querySelectorAll(".codeBlock");
+    if (!codeBlocks.length) return;
+
+    function visualLineCount(codeText) {
+      const styles = getComputedStyle(codeText);
+      const fontSize = parseFloat(styles.fontSize) || 14;
+      const lineHeight =
+        parseFloat(styles.lineHeight) || fontSize * 1.34;
+      const height = codeText.getBoundingClientRect().height;
+
+      return Math.max(1, Math.round(height / lineHeight));
+    }
+
+    function renderNumbers() {
+      codeBlocks.forEach((block) => {
+        let nextLineNumber = 1;
+        const lines = block.querySelectorAll(".codeLine");
+
+        lines.forEach((line) => {
+          const gutter = line.querySelector(".lineNo");
+          const codeText = line.querySelector(".codeText");
+          if (!gutter || !codeText) return;
+
+          const rows = visualLineCount(codeText);
+          const fragment = document.createDocumentFragment();
+
+          for (let i = 0; i < rows; i += 1) {
+            const number = document.createElement("span");
+            number.className = "lineNoRow";
+            number.textContent = String(nextLineNumber);
+            fragment.appendChild(number);
+            nextLineNumber += 1;
+          }
+
+          gutter.replaceChildren(fragment);
+        });
+      });
+    }
+
+    let frameId = null;
+    function scheduleRender() {
+      if (frameId !== null) cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        frameId = null;
+        renderNumbers();
+      });
+    }
+
+    scheduleRender();
+    window.addEventListener("load", scheduleRender, { once: true });
+    window.addEventListener("resize", scheduleRender);
+    document.fonts?.ready.then(scheduleRender).catch(() => {});
+
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(scheduleRender);
+      codeBlocks.forEach((block) => observer.observe(block));
+    }
+  }
+
   const initialTabId = getRouteTabId();
   const initialHashTarget =
     location.hash && document.getElementById(initialTabId);
@@ -1703,6 +1763,7 @@
 
   window.addEventListener("resize", updateTabIndicator);
   requestAnimationFrame(updateTabIndicator);
+  setupDynamicCodeLineNumbers();
 
   // Filters
   function setFilter(tag) {

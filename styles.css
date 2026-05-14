@@ -858,7 +858,7 @@ html.theme-crossfade body::before {
     "Roboto Mono",
     Consolas,
     monospace;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.34;
   tab-size: 2;
 }
@@ -878,10 +878,18 @@ html.theme-crossfade body::before {
 }
 
 .lineNo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   padding-right: 16px;
   color: color-mix(in srgb, var(--code-overlay) 72%, transparent);
   text-align: right;
   user-select: none;
+}
+
+.lineNoRow {
+  display: block;
+  line-height: inherit;
 }
 
 .codeText {
@@ -3129,7 +3137,7 @@ html.loaded .card.main {
   .codeBlock {
     --line-number-width: 54px;
     padding: 18px 22px 22px 0;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.34;
   }
 
@@ -3139,7 +3147,7 @@ html.loaded .card.main {
 
   .terminalPrompt {
     padding: 0 22px 22px;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .tile {
