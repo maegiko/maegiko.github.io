@@ -2,18 +2,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
-  --bg0: #121212;
-  --bg1: #121212;
+  --bg0: #080a0f;
+  --bg1: #0b0e15;
 
-  /* Neutral liquid-glass palette (dark) */
-  --glassA: rgba(38, 38, 38, 0.92);
-  --glassB: rgba(28, 28, 28, 0.88);
-  --glassC: rgba(18, 18, 18, 0.84);
-  --panelA: rgba(68, 68, 68, 0.9);
-  --panelB: rgba(50, 50, 50, 0.88);
-  --panelC: rgba(32, 32, 32, 0.86);
-  --stroke: rgba(255, 255, 255, 0.14);
-  --stroke2: rgba(255, 255, 255, 0.1);
+  /* Deep liquid-glass palette (dark, with a subtle blue cast) */
+  --glassA: rgba(21, 23, 30, 0.95);
+  --glassB: rgba(14, 16, 22, 0.92);
+  --glassC: rgba(8, 10, 15, 0.9);
+  --panelA: rgba(35, 38, 48, 0.93);
+  --panelB: rgba(25, 28, 37, 0.91);
+  --panelC: rgba(16, 19, 27, 0.89);
+  --stroke: rgba(197, 220, 255, 0.15);
+  --stroke2: rgba(197, 220, 255, 0.1);
   --outline: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.14) 0%,
@@ -48,15 +48,15 @@
     color-mix(in srgb, var(--accent) 78%, rgba(255, 255, 255, 0.24)) 58%,
     color-mix(in srgb, var(--accent) 58%, rgba(255, 255, 255, 0.16)) 100%
   );
-  --shine: rgba(255, 255, 255, 0.1);
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
-  --shadow2: 0 10px 24px rgba(0, 0, 0, 0.35);
+  --shine: rgba(216, 230, 255, 0.1);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.68);
+  --shadow2: 0 10px 24px rgba(0, 0, 0, 0.46);
 
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.68);
   --ascii-color: rgba(196, 192, 184, 0.634);
   --faint: rgba(255, 255, 255, 0.45);
-  --line: rgba(255, 255, 255, 0.12);
+  --line: rgba(197, 220, 255, 0.12);
 
   --radius: 18px;
   --radius2: 14px;
@@ -174,6 +174,10 @@ body {
     "Segoe UI Emoji";
   color: var(--text);
   background: var(--bg0);
+}
+
+:root:not(.light) body {
+  background: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
 }
 
 html.theme-crossfade body::before {
@@ -876,7 +880,7 @@ html.theme-crossfade body::before {
 
 .t2Card {
   border: 1px solid var(--stroke2);
-  background: rgba(60, 60, 60, 0.76);
+  background: rgba(22, 25, 34, 0.82);
   border-radius: 14px;
   padding: 12px;
 }
@@ -1406,8 +1410,8 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(82, 82, 82, 0.94),
-      rgba(58, 58, 58, 0.9)
+      rgba(33, 36, 46, 0.95),
+      rgba(22, 25, 34, 0.92)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -1464,8 +1468,8 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(58, 58, 58, 0.94),
-      rgba(34, 34, 34, 0.9)
+      rgba(27, 30, 39, 0.95),
+      rgba(15, 18, 25, 0.92)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1554,8 +1558,8 @@ textarea:focus {
     ),
     linear-gradient(
       180deg,
-      rgba(58, 58, 58, 0.94),
-      rgba(34, 34, 34, 0.9)
+      rgba(27, 30, 39, 0.95),
+      rgba(15, 18, 25, 0.92)
     );
 
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1809,7 +1813,7 @@ html.loaded .card.main {
         transparent 45%
       )
       padding-box,
-    linear-gradient(180deg, rgba(58, 58, 58, 0.94), rgba(34, 34, 34, 0.9))
+    linear-gradient(180deg, rgba(27, 30, 39, 0.95), rgba(15, 18, 25, 0.92))
       padding-box,
     var(--pillOutline) border-box;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
@@ -1825,7 +1829,7 @@ html.loaded .card.main {
         transparent 45%
       )
       padding-box,
-    linear-gradient(180deg, rgba(82, 82, 82, 0.94), rgba(58, 58, 58, 0.9))
+    linear-gradient(180deg, rgba(33, 36, 46, 0.95), rgba(22, 25, 34, 0.92))
       padding-box,
     var(--pillOutline) border-box;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
@@ -1842,7 +1846,7 @@ html.loaded .card.main {
         transparent 45%
       )
       padding-box,
-    linear-gradient(180deg, rgba(88, 88, 88, 0.94), rgba(48, 48, 48, 0.9))
+    linear-gradient(180deg, rgba(40, 44, 56, 0.95), rgba(20, 23, 32, 0.92))
       padding-box,
     var(--pillOutline) border-box;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.32);
@@ -1860,8 +1864,8 @@ html.loaded .card.main {
       padding-box,
     linear-gradient(
         180deg,
-        color-mix(in srgb, var(--accent) 10%, rgba(58, 58, 58, 0.94)),
-        color-mix(in srgb, var(--accent) 6%, rgba(34, 34, 34, 0.9))
+        color-mix(in srgb, var(--accent) 10%, rgba(27, 30, 39, 0.95)),
+        color-mix(in srgb, var(--accent) 6%, rgba(15, 18, 25, 0.92))
       )
       padding-box,
     var(--pillOutlineActive) border-box;
@@ -1880,8 +1884,8 @@ html.loaded .card.main {
       padding-box,
     linear-gradient(
         180deg,
-        color-mix(in srgb, var(--accent) 12%, rgba(64, 64, 64, 0.94)),
-        color-mix(in srgb, var(--accent) 7%, rgba(38, 38, 38, 0.9))
+        color-mix(in srgb, var(--accent) 12%, rgba(33, 36, 46, 0.95)),
+        color-mix(in srgb, var(--accent) 7%, rgba(18, 21, 29, 0.92))
       )
       padding-box,
     var(--pillOutlineActive) border-box;
@@ -2501,5 +2505,170 @@ html.loaded .card.main {
     align-self: center;
     flex-basis: 180px;
     width: min(180px, 100%);
+  }
+}
+
+@media (min-width: 981px) {
+  :root {
+    --max: 1360px;
+    --pad: 22px;
+    --radius: 22px;
+    --radius2: 17px;
+  }
+
+  .shell {
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 22px;
+    margin: 36px auto;
+    padding: 0 22px;
+  }
+
+  .side {
+    top: 22px;
+  }
+
+  .main {
+    padding: 16px 16px 20px;
+  }
+
+  .sideStack {
+    gap: 18px;
+  }
+
+  .sideTile {
+    border-radius: 24px;
+    padding: 18px;
+  }
+
+  .sideHero {
+    padding: 22px 18px 20px;
+  }
+
+  .avatar.avatarLarge {
+    width: 145px;
+    height: 145px;
+    border-radius: 34px;
+    margin-bottom: 18px;
+  }
+
+  .sideName {
+    font-size: 38px;
+  }
+
+  .sideRole {
+    padding: 9px 18px;
+    font-size: 14px;
+  }
+
+  .contactTile {
+    gap: 14px;
+    padding: 15px;
+    border-radius: 18px;
+  }
+
+  .cIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+  }
+
+  .cK {
+    font-size: 13px;
+  }
+
+  .cV {
+    font-size: 16px;
+  }
+
+  .socialBtn svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .top {
+    padding: 14px 14px 16px;
+  }
+
+  .tabs {
+    gap: 10px;
+    padding-bottom: 11px;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  #themeToggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+  }
+
+  .pane {
+    padding: 24px 18px 8px;
+  }
+
+  .h2 {
+    font-size: 36px;
+  }
+
+  .h2::after {
+    width: 54px;
+    height: 5px;
+    margin-top: 10px;
+  }
+
+  .lead {
+    font-size: 18px;
+    max-width: 50ch;
+  }
+
+  .about-me-content {
+    gap: 32px;
+  }
+
+  #asciiCanvas {
+    flex-basis: 275px;
+    width: min(275px, 100%);
+  }
+
+  .grid2 {
+    gap: 18px;
+    margin-top: 56px;
+  }
+
+  .tile {
+    padding: 18px;
+  }
+
+  .h3,
+  .resumeTitle {
+    font-size: 16px;
+  }
+
+  .chipIcon,
+  .resumeIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+  }
+
+  .chipTitle,
+  .chipText,
+  .tTop,
+  .tText,
+  .t2Role,
+  .t2Bullets li,
+  .projText {
+    font-size: 15px;
+  }
+
+  .t2Meta,
+  .projMeta,
+  .tag,
+  .t2Tag,
+  .filter {
+    font-size: 13px;
   }
 }
