@@ -957,6 +957,12 @@ html.theme-crossfade body::before {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.t2TagIcon .brandIconImg {
+  width: 17px;
+  height: 17px;
+  display: block;
+  object-fit: contain;
+}
 .t2TagIcon .logoFill {
   fill: currentColor;
   stroke: none;

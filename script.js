@@ -50,6 +50,13 @@
   const blurredImageCache = new Map();
   let modalImageRequestId = 0;
 
+  const deviconBaseUrl =
+    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
+
+  function deviconSvg(path) {
+    return `<img class="brandIconImg" src="${deviconBaseUrl}/${path}" alt="" loading="lazy" decoding="async" />`;
+  }
+
   const iconSvgs = {
     api: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -110,26 +117,13 @@
       </svg>
     `,
     cLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path>
-        <path d="M15.5 9.3A4.2 4.2 0 1 0 15.5 14.7"></path>
-      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 600 600"><path fill="#A9B9CB" d="M566.6 176.4q0-15-6.5-26.7a51 51 0 0 0-19.3-18.8L327.8 8.1a52 52 0 0 0-56.7.5C242.8 25.3 101.3 106.5 59 131a49 49 0 0 0-25.7 45.5v247.2q0 14.8 6.2 26.2A51 51 0 0 0 59.2 469c42.1 24.4 183.6 105.6 211.9 122.3a52 52 0 0 0 56.7.5l213-122.8a51 51 0 0 0 19.6-19.4 53 53 0 0 0 6.3-26.1z"/><path fill="#7F8B99" d="M327.3 8.6a52 52 0 0 0-56.6.6c-28.2 16.6-169.5 97.5-211.6 122a49 49 0 0 0-25.7 45.3V423a53 53 0 0 0 6.2 26A51 51 0 0 0 59 468.5l42 24.2L491 103z"/><path fill="#fff" d="m355.1 262.4 83 .6c0-34.6-35-119.2-135.3-119.2-64 0-150 40.6-150 157.5 0 116.8 84.3 155 150 155 106.2 0 131.6-73.6 131.6-115.2l-79.1-4.5s2 48-53 48c-50.8 0-59.3-62.2-59.3-83.3 0-32.2 11.5-83.9 59.3-83.9 47.9 0 52.8 45 52.8 45"/></svg>
     `,
     csharpLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path>
-        <path d="M11.2 9.3A3.4 3.4 0 1 0 11.2 14.7"></path>
-        <path d="M14 9h5"></path>
-        <path d="M13.5 12h5"></path>
-        <path d="M15.2 7.8 14.4 16.2"></path>
-        <path d="M18.1 7.8 17.3 16.2"></path>
-      </svg>
+      ${deviconSvg("csharp/csharp-original.svg")}
     `,
     cssLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 3h14l-1.3 15L12 21l-5.7-3L5 3Z"></path>
-        <path d="M9 8h6l-.3 3H9.3l.3 4L12 16.2l2.4-1.2.2-2"></path>
-      </svg>
+      ${deviconSvg("css3/css3-original.svg")}
     `,
     flask: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -138,28 +132,17 @@
         <path d="M8 16h8"></path>
       </svg>
     `,
+    gitLogo: `
+      ${deviconSvg("git/git-original.svg")}
+    `,
     hexagon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path>
-        <path d="M9 15V9l6 6V9"></path>
-      </svg>
+      ${deviconSvg("nodejs/nodejs-original.svg")}
     `,
     javaLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M11 4c2 1.6-3 2.8-.4 4.8"></path>
-        <path d="M14 3c2.7 2.1-4.4 3.5-1 6.3"></path>
-        <path d="M7 11.5c3.2 1 7.6.9 10 0"></path>
-        <path d="M8 14c2.8.8 6.9.8 9 0"></path>
-        <path d="M6.5 16.5c3.3 1.5 8.9 1.4 11.3-.2"></path>
-        <path d="M8 19c2.6.8 6.7.8 9 0"></path>
-      </svg>
+      ${deviconSvg("java/java-original.svg")}
     `,
     jsLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-        <path d="M9 9v6.2c0 1.1-.7 1.8-1.8 1.8-.6 0-1.1-.2-1.5-.5"></path>
-        <path d="M12.2 16.2c.5.5 1.2.8 2 .8 1 0 1.8-.4 1.8-1.2 0-.8-.7-1.1-1.7-1.5-1-.4-1.8-.8-1.8-1.9 0-1 .8-1.8 2.1-1.8.8 0 1.4.2 1.9.6"></path>
-      </svg>
+      <i class="devicon-javascript-plain colored brandIconGlyph"></i>
     `,
     lightning: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -209,12 +192,10 @@
       </svg>
     `,
     pythonLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 3h3.2A3.8 3.8 0 0 1 19 6.8V10h-7a3 3 0 0 0-3 3v1H5.8A2.8 2.8 0 0 1 3 11.2V8.8A3.8 3.8 0 0 1 6.8 5H12V3Z"></path>
-        <path d="M12 21H8.8A3.8 3.8 0 0 1 5 17.2V14h7a3 3 0 0 0 3-3v-1h3.2a2.8 2.8 0 0 1 2.8 2.8v2.4a3.8 3.8 0 0 1-3.8 3.8H12v2Z"></path>
-        <circle cx="8" cy="8" r=".7" class="logoFill"></circle>
-        <circle cx="16" cy="16" r=".7" class="logoFill"></circle>
-      </svg>
+      ${deviconSvg("python/python-original.svg")}
+    `,
+    reactLogo: `
+      ${deviconSvg("react/react-original.svg")}
     `,
     pipeline: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -260,12 +241,7 @@
       </svg>
     `,
     tsLogo: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-        <path d="M7 9h6"></path>
-        <path d="M10 9v8"></path>
-        <path d="M14 16.2c.5.5 1.2.8 2 .8 1 0 1.8-.4 1.8-1.2 0-.8-.7-1.1-1.7-1.5-1-.4-1.8-.8-1.8-1.9 0-1 .8-1.8 2.1-1.8.8 0 1.4.2 1.9.6"></path>
-      </svg>
+      <i class="devicon-typescript-plain colored brandIconGlyph"></i>
     `,
     stopwatch: `
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -326,7 +302,7 @@
     flask: "flask",
     linting: "lint",
     frontend: "monitor",
-    git: "branch",
+    git: "gitLogo",
     jest: "test",
     java: "javaLogo",
     javascript: "jsLogo",
@@ -344,7 +320,7 @@
     stylelint: "lint",
     pyhtml: "squareCode",
     python: "pythonLogo",
-    react: "atom",
+    react: "reactLogo",
     "react router dom": "package",
     "responsive ui": "monitor",
     rest: "api",
@@ -369,13 +345,129 @@
     xunit: "package",
   };
 
+  const techIconColors = {
+    ".net": "#512bd4",
+    ai: "#10a37f",
+    "ai feature": "#10a37f",
+    "ai sdk": "#10a37f",
+    apis: "#38bdf8",
+    authentication: "#f59e0b",
+    axios: "#5a29e4",
+    bcrypt: "#8b5cf6",
+    c: "#a8b9cc",
+    "c#": "#9b4f96",
+    "ci/cd pipelines": "#22c55e",
+    checklists: "#22c55e",
+    cookies: "#d97706",
+    css: "#1572b6",
+    dapper: "#a855f7",
+    "data modelling": "#38bdf8",
+    deepseek: "#4d6bfe",
+    deployment: "#38bdf8",
+    downtimer: "#f59e0b",
+    dsa: "#fbbf24",
+    "express.js": "#ffffff",
+    eslint: "#4b32c3",
+    fastendpoints: "#8b5cf6",
+    flask: "#ffffff",
+    linting: "#4b32c3",
+    frontend: "#38bdf8",
+    git: "#f05032",
+    jest: "#c21325",
+    java: "#f89820",
+    javascript: "#f7df1e",
+    "javascript/typescript": "#f7df1e",
+    "jwt auth": "#d63aff",
+    langchain: "#1c3c3c",
+    crypto: "#f7931a",
+    "highlight.js": "#f59e0b",
+    llm: "#10a37f",
+    llms: "#10a37f",
+    "machine learning": "#10a37f",
+    "node.js": "#5fa04e",
+    openai: "#10a37f",
+    prettier: "#f7b93e",
+    stylelint: "#263238",
+    pyhtml: "#e34f26",
+    python: "#3776ab",
+    react: "#61dafb",
+    "react router dom": "#ca4245",
+    "responsive ui": "#38bdf8",
+    rest: "#38bdf8",
+    "radix ui": "#ffffff",
+    radixui: "#ffffff",
+    "shadcn/ui": "#ffffff",
+    shadcn: "#ffffff",
+    "slide editing": "#38bdf8",
+    sql: "#4479a1",
+    sqlite: "#003b57",
+    "systems design / architecture": "#fbbf24",
+    tailwindcss: "#38bdf8",
+    testing: "#22c55e",
+    "time-based resets": "#f59e0b",
+    transactions: "#22c55e",
+    typescript: "#3178c6",
+    vercel: "#ffffff",
+    vite: "#646cff",
+    uuid: "#8b5cf6",
+    "uuid-int": "#8b5cf6",
+    validator: "#22c55e",
+    xunit: "#512bd4",
+  };
+
+  const fallbackIconColors = {
+    api: "#38bdf8",
+    atom: "#61dafb",
+    beaker: "#22c55e",
+    braces: "#f59e0b",
+    branch: "#fbbf24",
+    checklist: "#22c55e",
+    cloud: "#38bdf8",
+    database: "#4479a1",
+    cLogo: "#a8b9cc",
+    csharpLogo: "#9b4f96",
+    cssLogo: "#1572b6",
+    flask: "#ffffff",
+    hexagon: "#5fa04e",
+    javaLogo: "#f89820",
+    jsLogo: "#f7df1e",
+    lightning: "#646cff",
+    lock: "#f59e0b",
+    lint: "#4b32c3",
+    monitor: "#38bdf8",
+    neural: "#10a37f",
+    palette: "#a855f7",
+    pythonLogo: "#3776ab",
+    pipeline: "#22c55e",
+    package: "#8b5cf6",
+    rocket: "#f97316",
+    shield: "#d63aff",
+    sparkle: "#fbbf24",
+    squareCode: "#f59e0b",
+    tsLogo: "#3178c6",
+    stopwatch: "#f59e0b",
+    test: "#22c55e",
+    transactions: "#22c55e",
+    wind: "#38bdf8",
+  };
+
   function normaliseTag(tag) {
     return tag.trim().toLowerCase();
   }
 
-  function getTechIconSvg(tag) {
+  function getTechIconName(tag) {
     const key = normaliseTag(tag);
-    return iconSvgs[techIconNames[key]] || iconSvgs.squareCode;
+    return techIconNames[key] || "squareCode";
+  }
+
+  function getTechIconSvg(tag) {
+    return iconSvgs[getTechIconName(tag)];
+  }
+
+  function getTechIconColor(tag) {
+    const key = normaliseTag(tag);
+    const iconName = getTechIconName(tag);
+    return techIconColors[key] || fallbackIconColors[iconName] || "#f59e0b";
   }
 
   function enhanceTechPill(pill) {
@@ -388,6 +480,7 @@
     const icon = document.createElement("span");
     icon.className = "t2TagIcon";
     icon.setAttribute("aria-hidden", "true");
+    icon.style.color = getTechIconColor(label);
     icon.innerHTML = getTechIconSvg(label);
 
     const text = document.createElement("span");
@@ -582,19 +675,24 @@
         } else if (!reduceMotion.matches && this.assembleStart === 0) {
           const time = performance.now();
           const wave =
-            Math.sin(time * 0.0014 + this.originY * 0.055 + this.originX * 0.01) *
-            0.32;
+            Math.sin(
+              time * 0.0014 + this.originY * 0.055 + this.originX * 0.01,
+            ) * 0.32;
           drawX += wave * 0.45;
           drawY += wave;
 
           if (this.isHairParticle) {
-            const heightFalloff = 1 - Math.min(1, this.originY / (height * 0.36));
+            const heightFalloff =
+              1 - Math.min(1, this.originY / (height * 0.36));
             const gust =
               Math.sin(time * 0.0022 + this.originY * 0.08) * 0.85 +
               Math.sin(time * 0.0011 + this.originX * 0.11) * 0.45;
 
             drawX += gust * heightFalloff;
-            drawY += Math.sin(time * 0.0018 + this.originX * 0.09) * heightFalloff * 0.22;
+            drawY +=
+              Math.sin(time * 0.0018 + this.originX * 0.09) *
+              heightFalloff *
+              0.22;
           }
         }
 
@@ -1122,9 +1220,14 @@
     });
     function handleStarPointerMove(event) {
       const hasMovement =
-        typeof event.movementX === "number" || typeof event.movementY === "number";
-      const nextVx = hasMovement ? event.movementX : event.clientX - pointer.prevX;
-      const nextVy = hasMovement ? event.movementY : event.clientY - pointer.prevY;
+        typeof event.movementX === "number" ||
+        typeof event.movementY === "number";
+      const nextVx = hasMovement
+        ? event.movementX
+        : event.clientX - pointer.prevX;
+      const nextVy = hasMovement
+        ? event.movementY
+        : event.clientY - pointer.prevY;
 
       pointer.vx = pointer.vx * 0.75 + nextVx * 0.25;
       pointer.vy = pointer.vy * 0.75 + nextVy * 0.25;
@@ -1273,8 +1376,11 @@
   }
 
   const aboutLead = document.querySelector("#about .lead");
-  const aboutLeadText = aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
-  const resumeBlocks = document.querySelectorAll("#resume .resumeStack > .tile");
+  const aboutLeadText =
+    aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
+  const resumeBlocks = document.querySelectorAll(
+    "#resume .resumeStack > .tile",
+  );
   let aboutLeadFrameId = null;
 
   function animateAboutLead() {
@@ -1331,7 +1437,8 @@
         const lineSpan = document.createElement("span");
         lineSpan.className = "leadLine";
         lineSpan.style.setProperty("--line-index", index);
-        lineSpan.textContent = index === lineGroups.length - 1 ? line : `${line} `;
+        lineSpan.textContent =
+          index === lineGroups.length - 1 ? line : `${line} `;
         aboutLead.appendChild(lineSpan);
       });
 
@@ -1364,7 +1471,8 @@
       block.classList.add("is-resume-entering");
     });
 
-    const totalDuration = 260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
+    const totalDuration =
+      260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
     resumeAnimationTimeout = window.setTimeout(() => {
       resumeAnimationTimeout = null;
       resumeBlocks.forEach((block) => {
@@ -1398,7 +1506,8 @@
       project.classList.add("is-project-entering");
     });
 
-    const totalDuration = 260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
+    const totalDuration =
+      260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
     projectAnimationTimeout = window.setTimeout(() => {
       projectAnimationTimeout = null;
       visibleProjects.forEach((project) => {
@@ -1538,7 +1647,8 @@
   }
 
   const initialTabId = getRouteTabId();
-  const initialHashTarget = location.hash && document.getElementById(initialTabId);
+  const initialHashTarget =
+    location.hash && document.getElementById(initialTabId);
 
   if (initialHashTarget) {
     setTab(initialTabId, { updateHash: false });
