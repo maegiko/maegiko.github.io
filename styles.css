@@ -806,11 +806,15 @@ html.theme-crossfade body::before {
   width: 34px;
   height: 34px;
   border-radius: 12px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--stroke2);
   background: rgba(255, 255, 255, 0.035);
   color: var(--accent);
+}
+.resumeIcon svg {
+  display: block;
 }
 :root.light .resumeIcon {
   color: rgba(10, 12, 16, 0.78);
