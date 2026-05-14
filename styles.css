@@ -2388,22 +2388,28 @@ html.loaded .card.main {
 }
 
 .siteFooter {
-  position: absolute;
-  right: 0;
-  bottom: 10px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   width: 100%;
-  margin: 0;
-  padding: 0 14px;
-  z-index: 2;
+  margin: 2px 0 0;
+  padding: 12px 14px 0;
+  border-top: 1px solid var(--line);
   color: var(--faint);
   font-size: 11px;
   line-height: 1.4;
   opacity: 0.5;
   pointer-events: none;
-  text-align: right;
+  text-align: center;
+}
+
+.siteFooterAside {
+  display: none;
+}
+
+.siteFooterPage {
+  justify-self: center;
+  margin: 16px 0 10px;
 }
 
 :root.light .siteFooter {
@@ -2538,9 +2544,10 @@ html.loaded .card.main {
   }
 
   .siteFooter {
-    position: relative;
-    right: auto;
-    bottom: auto;
+    margin-top: 2px;
+  }
+
+  .siteFooterPage {
     margin: 16px 0 10px;
   }
 }
@@ -2562,6 +2569,14 @@ html.loaded .card.main {
 
   .side {
     top: 22px;
+  }
+
+  .siteFooterAside {
+    display: flex;
+  }
+
+  .siteFooterPage {
+    display: none;
   }
 
   .main {
