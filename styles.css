@@ -713,11 +713,15 @@ html.theme-crossfade body::before {
 .chipIcon {
   width: 32px;
   height: 32px;
+  flex: 0 0 32px;
+  aspect-ratio: 1;
   border-radius: 10px;
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--stroke2);
+  font-size: 16px;
+  line-height: 1;
 }
 .chipTitle {
   font-weight: 650;
@@ -2675,6 +2679,11 @@ html.loaded .card.main {
     width: 40px;
     height: 40px;
     border-radius: 13px;
+  }
+
+  .chipIcon {
+    flex-basis: 40px;
+    font-size: 19px;
   }
 
   .chipTitle,
