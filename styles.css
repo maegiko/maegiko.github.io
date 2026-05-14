@@ -161,6 +161,7 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  position: relative;
   font-family:
     "Inter",
     ui-sans-serif,
@@ -265,9 +266,8 @@ html.theme-crossfade body::before {
 .main {
   width: 100%;
   min-width: 0;
-  align-self: start;
+  align-self: stretch;
   padding: 12px 12px 16px;
-  min-height: auto; /* or just delete the min-height line */
   position: relative;
 }
 
@@ -2388,11 +2388,14 @@ html.loaded .card.main {
 }
 
 .siteFooter {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   width: 100%;
-  margin: auto 0 10px;
+  margin: 0;
   padding: 0 14px;
   z-index: 2;
   color: var(--faint);
@@ -2532,6 +2535,13 @@ html.loaded .card.main {
 
   .about-me-content .lead {
     order: 3;
+  }
+
+  .siteFooter {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin: 16px 0 10px;
   }
 }
 
