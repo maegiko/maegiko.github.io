@@ -26,6 +26,7 @@
   const form = document.getElementById("contactForm");
   const hint = document.getElementById("formHint");
   const pageShell = document.querySelector(".shell");
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
   const tabs = document.querySelectorAll(".tab");
   const tabsContainer = document.querySelector(".tabs");
@@ -1372,11 +1373,17 @@
     `;
   }
 
+  function updateThemeChrome(isLight) {
+    themeColorMeta?.setAttribute("content", isLight ? "#f6f7f9" : "#080a0f");
+  }
+
   // Theme: default dark; only set light if saved.
   const savedTheme = getSavedTheme();
   if (savedTheme === "light") root.classList.add("light");
   else root.classList.remove("light");
-  renderThemeIcon(root.classList.contains("light"));
+  const initiallyLight = root.classList.contains("light");
+  renderThemeIcon(initiallyLight);
+  updateThemeChrome(initiallyLight);
 
   themeToggle?.addEventListener("click", () => {
     playThemeCrossfade();
@@ -1384,6 +1391,7 @@
     const nowLight = root.classList.contains("light");
     saveTheme(nowLight ? "light" : "dark");
     renderThemeIcon(nowLight);
+    updateThemeChrome(nowLight);
     window.dispatchEvent(new CustomEvent("asciiAvatar:themechange"));
   });
 
