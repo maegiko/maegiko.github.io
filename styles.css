@@ -766,6 +766,7 @@ html.theme-crossfade body::before {
   --code-pink: #f5bde6;
   --code-peach: #f5a97f;
   --code-sky: #91d7e3;
+  --code-plain-punct: #ffffff;
   --code-border: rgba(183, 189, 248, 0.14);
   --code-shadow: rgba(0, 0, 0, 0.34);
 }
@@ -786,6 +787,7 @@ html.theme-crossfade body::before {
   --code-pink: #ea76cb;
   --code-peach: #fe640b;
   --code-sky: #04a5e5;
+  --code-plain-punct: var(--code-text);
   --code-border: rgba(76, 79, 105, 0.14);
   --code-shadow: rgba(76, 79, 105, 0.12);
   --code-glow: transparent;
@@ -933,9 +935,14 @@ html.theme-crossfade body::before {
   color: var(--code-green);
 }
 
-.op,
 .punct {
   color: var(--code-yellow);
+}
+
+.op,
+.comma,
+.semi {
+  color: var(--code-plain-punct);
 }
 
 .brace {
