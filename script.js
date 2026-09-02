@@ -303,7 +303,25 @@
     `,
     rrd: `
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 600 600"><path fill="#000" d="M183 353.6a54.4 54.4 0 1 0 0-108.8 54.4 54.4 0 0 0 0 108.8M54.4 462.4a54.4 54.4 0 1 0 0-108.8 54.4 54.4 0 0 0 0 108.8m491.2 0a54.4 54.4 0 1 0 0-108.8 54.4 54.4 0 0 0 0 108.8"/><path fill="#D0021B" d="M367 301.5c-1.8-18.2-2.7-33.3-16.6-44-17.6-13.4-37.6-4.7-62.2-13.5a55 55 0 0 1-42.1-53 55 55 0 0 1 55.4-54.4 55 55 0 0 1 50.7 32.5c13.1 25 4.6 50.3 21 63.1 19.6 15.2 46 4 75.3 18.4a55 55 0 0 1 23 19.8 54 54 0 0 1 9 29.6c0 25.6-18 47-42.1 52.9-24.6 8.9-44.6.1-62.2 13.6-19.9 15.1-9.3 40.5-25.4 67.2a56 56 0 0 1-49.3 29.7 55 55 0 0 1-55.4-54.5c0-21.8 13-40.7 32-49.3 29.3-14.4 55.7-3.3 75.2-18.4 11.3-8.8 13.6-22.2 13.6-39.7"/></svg>
-    `
+    `,
+    springLogo: `
+      ${deviconSvg("spring/spring-original.svg")}
+    `,
+    postgresLogo: `
+      ${deviconSvg("postgresql/postgresql-original.svg")}
+    `,
+    dockerLogo: `
+      ${deviconSvg("docker/docker-original.svg")}
+    `,
+    junitLogo: `
+      ${deviconSvg("junit/junit-original.svg")}
+    `,
+    githubActions: `
+      ${deviconSvg("githubactions/githubactions-original.svg")}
+    `,
+    cloudflare: `
+      ${deviconSvg("cloudflare/cloudflare-original.svg")}
+    `,
   };
 
   const techIconNames = {
@@ -318,6 +336,7 @@
     c: "cLogo",
     "c#": "csharpLogo",
     "ci/cd pipelines": "pipeline",
+    cloudflare: "cloudflare",
     checklists: "checklist",
     cookies: "database",
     css: "cssLogo",
@@ -325,16 +344,21 @@
     "data modelling": "database",
     deepseek: "deepseek",
     deployment: "cloud",
+    docker: "dockerLogo",
     downtimer: "package",
     dsa: "branch",
     "express.js": "api",
     eslint: "eslint",
     fastendpoints: "rocket",
+    flyway: "database",
     flask: "flask",
     linting: "lint",
     frontend: "monitor",
     git: "gitLogo",
+    "github actions": "githubActions",
+    groq: "neural",
     jest: "jest",
+    junit: "junitLogo",
     java: "javaLogo",
     javascript: "jsLogo",
     "javascript/typescript": "jsLogo",
@@ -346,6 +370,7 @@
     llms: "neural",
     "machine learning": "neural",
     "node.js": "node",
+    postgresql: "postgresLogo",
     openai: "neural",
     prettier: "lint",
     stylelint: "lint",
@@ -353,6 +378,8 @@
     python: "pythonLogo",
     react: "reactLogo",
     "react router dom": "rrd",
+    "spring boot": "springLogo",
+    "spring security": "shield",
     "responsive ui": "monitor",
     rest: "api",
     "radix ui": "palette",
@@ -364,7 +391,9 @@
     sqlite: "sqLite",
     "systems design / architecture": "branch",
     tailwindcss: "tailwind",
+    "tanstack query": "package",
     testing: "test",
+    testcontainers: "beaker",
     "time-based resets": "stopwatch",
     transactions: "transactions",
     typescript: "tsLogo",
@@ -389,6 +418,7 @@
     c: "#a8b9cc",
     "c#": "#9b4f96",
     "ci/cd pipelines": "#22c55e",
+    cloudflare: "#f38020",
     checklists: "#22c55e",
     cookies: "#d97706",
     css: "#1572b6",
@@ -396,16 +426,21 @@
     "data modelling": "#38bdf8",
     deepseek: "#4d6bfe",
     deployment: "#38bdf8",
+    docker: "#2496ed",
     downtimer: "#f59e0b",
     dsa: "#fbbf24",
     "express.js": "#ffffff",
     eslint: "#4b32c3",
     fastendpoints: "#8b5cf6",
+    flyway: "#cc0000",
     flask: "#ffffff",
     linting: "#4b32c3",
     frontend: "#38bdf8",
     git: "#f05032",
+    "github actions": "#2088ff",
+    groq: "#f55036",
     jest: "#c21325",
+    junit: "#dc514a",
     java: "#f89820",
     javascript: "#f7df1e",
     "javascript/typescript": "#f7df1e",
@@ -417,6 +452,7 @@
     llms: "#10a37f",
     "machine learning": "#10a37f",
     "node.js": "#5fa04e",
+    postgresql: "#336791",
     openai: "#10a37f",
     prettier: "#f7b93e",
     stylelint: "#263238",
@@ -424,6 +460,8 @@
     python: "#3776ab",
     react: "#61dafb",
     "react router dom": "#ca4245",
+    "spring boot": "#6db33f",
+    "spring security": "#6db33f",
     "responsive ui": "#38bdf8",
     rest: "#38bdf8",
     "radix ui": "#ffffff",
@@ -435,7 +473,9 @@
     sqlite: "#003b57",
     "systems design / architecture": "#fbbf24",
     tailwindcss: "#38bdf8",
+    "tanstack query": "#ff4154",
     testing: "#22c55e",
+    testcontainers: "#291a80",
     "time-based resets": "#f59e0b",
     transactions: "#22c55e",
     typescript: "#3178c6",
