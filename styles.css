@@ -355,6 +355,38 @@ html.theme-crossfade body::before {
   overflow-wrap: anywhere;
 }
 
+.statusHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+.statusDate {
+  color: var(--faint);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.statusText {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.statusLink {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.28);
+  padding-bottom: 1px;
+}
+.statusLink:hover {
+  border-bottom-style: solid;
+}
+:root.light .statusLink {
+  border-bottom-color: rgba(10, 12, 16, 0.28);
+}
+
 .contactTile {
   display: flex;
   align-items: center;
