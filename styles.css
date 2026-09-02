@@ -1315,34 +1315,29 @@ html.theme-crossfade body::before {
 }
 .skillGroups {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 10px;
-  align-items: start;
+  gap: 16px;
 }
 .skillGroup {
-  display: contents;
+  display: grid;
+  gap: 7px;
 }
 .skillGroupLabel {
   color: var(--faint);
-  font-size: 12px;
-  letter-spacing: 0.01em;
-  padding-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 @media (max-width: 560px) {
   .skillGroups {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
+    gap: 14px;
   }
   .skillGroup {
-    display: grid;
     gap: 6px;
-    margin-top: 6px;
   }
-  .skillGroup:first-child {
-    margin-top: 0;
-  }
-  .skillGroupLabel {
-    padding-top: 0;
+  .skillSupplemental {
+    display: none;
   }
 }
 .tag {
