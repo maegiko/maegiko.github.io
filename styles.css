@@ -1281,6 +1281,38 @@ html.theme-crossfade body::before {
   flex-wrap: wrap;
   gap: 8px;
 }
+.skillGroups {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+.skillGroup {
+  display: contents;
+}
+.skillGroupLabel {
+  color: var(--faint);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding-top: 8px;
+}
+@media (max-width: 560px) {
+  .skillGroups {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .skillGroup {
+    display: grid;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .skillGroup:first-child {
+    margin-top: 0;
+  }
+  .skillGroupLabel {
+    padding-top: 0;
+  }
+}
 .tag {
   border: 1px solid var(--stroke2);
   background: rgba(255, 255, 255, 0.035);
