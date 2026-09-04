@@ -1453,9 +1453,6 @@
   const aboutLead = document.querySelector("#about .lead");
   const aboutLeadText =
     aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
-  const resumeBlocks = document.querySelectorAll(
-    "#resume .resumeStack > .tile",
-  );
   let aboutLeadFrameId = null;
 
   function animateAboutLead() {
@@ -1523,84 +1520,84 @@
     });
   }
 
-  let projectAnimationTimeout = null;
-  let resumeAnimationTimeout = null;
+  /* Cards arrive one at a time instead of a whole section at once. The fade
+     starts just before the card's midpoint clears the bottom of the window,
+     so it is already settling by the time it is properly on screen. */
+  const cards = document.querySelectorAll(
+    ".projectGrid > .project, #resume .resumeStack > .tile",
+  );
+  const CARD_TRIGGER = 0.42;
+  const CARD_FADE_MS = 520;
+  const CARD_COLUMN_STAGGER_MS = 90;
 
-  function animateResumeBlocks() {
-    if (prefersReducedMotion.matches) return;
+  /* Side-by-side cards cross the trigger line together, so the one further
+     right waits its turn. Single-column layouts all land on column 0, which
+     makes this a no-op for the resume stack and for narrow screens. */
+  function columnDelay(card) {
+    const grid = card.parentElement;
+    if (!grid) return 0;
 
-    if (resumeAnimationTimeout !== null) {
-      window.clearTimeout(resumeAnimationTimeout);
-    }
+    const rect = card.getBoundingClientRect();
+    if (rect.width <= 0) return 0;
 
-    resumeBlocks.forEach((block, index) => {
-      block.classList.remove("is-resume-entering");
-      block.style.setProperty("--resume-index", index);
-    });
-
-    if (resumeBlocks.length > 0) {
-      void resumeBlocks[0].offsetWidth;
-    }
-
-    resumeBlocks.forEach((block) => {
-      block.classList.add("is-resume-entering");
-    });
-
-    const totalDuration =
-      260 + 520 + Math.max(0, resumeBlocks.length - 1) * 220;
-    resumeAnimationTimeout = window.setTimeout(() => {
-      resumeAnimationTimeout = null;
-      resumeBlocks.forEach((block) => {
-        block.classList.remove("is-resume-entering");
-        block.style.removeProperty("--resume-index");
-      });
-    }, totalDuration + 80);
+    const offset = rect.left - grid.getBoundingClientRect().left;
+    return Math.round(offset / rect.width) * CARD_COLUMN_STAGGER_MS;
   }
 
-  function animateProjectCards() {
-    if (prefersReducedMotion.matches) return;
+  function enterCard(card) {
+    const delay = columnDelay(card);
 
-    if (projectAnimationTimeout !== null) {
-      window.clearTimeout(projectAnimationTimeout);
+    card.classList.remove("is-cardPending");
+    card.style.setProperty("--cardDelay", `${delay}ms`);
+    card.classList.add("is-cardEntering");
+
+    window.setTimeout(() => {
+      card.classList.remove("is-cardEntering");
+      card.style.removeProperty("--cardDelay");
+    }, delay + CARD_FADE_MS + 80);
+  }
+
+  function setupCardReveals() {
+    if (!cards.length) return;
+
+    if (prefersReducedMotion.matches || !("IntersectionObserver" in window)) {
+      return;
     }
 
-    const visibleProjects = Array.from(projects).filter(
-      (project) => project.style.display !== "none",
+    const pending = Array.from(cards).filter((card) => {
+      const rect = card.getBoundingClientRect();
+      // Anything already on screen at load stays on screen - the reveal is
+      // for cards the visitor has yet to reach.
+      return rect.top >= window.innerHeight;
+    });
+
+    pending.forEach((card) => card.classList.add("is-cardPending"));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const rect = entry.boundingClientRect;
+          if (rect.top + rect.height * CARD_TRIGGER > window.innerHeight) {
+            return;
+          }
+
+          observer.unobserve(entry.target);
+          enterCard(entry.target);
+        });
+      },
+      { threshold: [0, 0.2, CARD_TRIGGER, 0.6] },
     );
 
-    visibleProjects.forEach((project, index) => {
-      project.classList.remove("is-project-entering");
-      project.style.setProperty("--project-index", index);
-    });
-
-    if (visibleProjects.length > 0) {
-      void visibleProjects[0].offsetWidth;
-    }
-
-    visibleProjects.forEach((project) => {
-      project.classList.add("is-project-entering");
-    });
-
-    const totalDuration =
-      260 + 520 + Math.max(0, visibleProjects.length - 1) * 145;
-    projectAnimationTimeout = window.setTimeout(() => {
-      projectAnimationTimeout = null;
-      visibleProjects.forEach((project) => {
-        project.classList.remove("is-project-entering");
-        project.style.removeProperty("--project-index");
-      });
-    }, totalDuration + 80);
+    pending.forEach((card) => observer.observe(card));
   }
 
-  /* Sections reveal themselves as they scroll into view: the header lands
-     first, then whatever staggered cards the section holds. */
+  /* Sections themselves are always visible now; this only drives the one-off
+     flourishes that belong to About. */
   const sectionRunners = {
     about: () => {
       window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
       animateAboutLead();
     },
-    projects: animateProjectCards,
-    resume: animateResumeBlocks,
   };
   const revealedPanes = new WeakSet();
 
@@ -1967,6 +1964,7 @@
   enhanceTechPills();
   setupAsciiAvatar();
   setupStarfield();
+  setupCardReveals();
 })();
 
 const form = document.getElementById("contactForm");
