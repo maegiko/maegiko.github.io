@@ -3399,12 +3399,12 @@ html.loaded .card.main {
   .currentlyTitle,
   .t2Role,
   .t2Bullets li,
-  .projTitle {
-    font-size: 19px;
-  }
-
   .projText {
     font-size: 15px;
+  }
+
+  .projTitle {
+    font-size: 19px;
   }
 
   .t2Meta,
