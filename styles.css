@@ -78,15 +78,17 @@
     rgba(197, 220, 255, 0) 100%
   );
   --sectionSheen: radial-gradient(
-    72% 100% at 50% 0%,
+    72% 50% at 50% 50%,
     rgba(197, 220, 255, 0.03) 0%,
-    rgba(197, 220, 255, 0) 72%
+    rgba(197, 220, 255, 0) 100%
   );
+  --sectionGap: 84px;
   --canvasGrain: 0.02;
   --canvasPad: clamp(18px, 3.4vw, 48px);
   /* The rail's own surface: a shade under the canvas, plus the seam that
      softens where it meets the content column. */
   --railSurface: rgba(0, 0, 0, 0.3);
+  --canvasDrop: rgba(0, 0, 0, 0.6);
 
   --pageBg: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
 
@@ -175,12 +177,13 @@
     rgba(255, 255, 255, 0) 100%
   );
   --sectionSheen: radial-gradient(
-    72% 100% at 50% 0%,
+    72% 50% at 50% 50%,
     rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0) 72%
+    rgba(255, 255, 255, 0) 100%
   );
   --canvasGrain: 0.026;
   --railSurface: rgba(0, 0, 0, 0.014);
+  --canvasDrop: rgba(0, 0, 0, 0.07);
 
   --pageBg: var(--bg0);
 
@@ -282,7 +285,11 @@ html.theme-crossfade body::before {
      over a long falloff quantises into 1-level contours far enough apart to
      read as vertical lines. Compressed to ~8px the same steps land about a
      pixel apart and read as the gradient they are meant to be. */
-  box-shadow: inset -10px 0 12px -10px var(--canvasShade);
+  /* Outer drop lifts the sheet off the star field; kept to a 16px blur so
+     its ramp packs tightly enough not to contour. */
+  box-shadow:
+    0 0 16px var(--canvasDrop),
+    inset -10px 0 12px -10px var(--canvasShade);
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
   gap: 44px;
@@ -888,18 +895,18 @@ html.theme-crossfade body::before {
   scroll-margin-top: 82px;
 }
 
-.pane::before {
+.pane + .pane::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -46px -7% auto;
-  height: 360px;
+  inset: calc(-1 * (var(--sectionGap) / 2 + 150px)) -7% auto;
+  height: 300px;
   pointer-events: none;
   background: var(--sectionSheen);
 }
 /* Section spacing now lives on the sections themselves. */
 .pane + .pane {
-  margin-top: 84px;
+  margin-top: var(--sectionGap);
 }
 
 /* "Projects ------------" - the rule rides beside the heading and reveals
@@ -3370,8 +3377,8 @@ html.loaded .card.main {
     display: none;
   }
 
-  .pane + .pane {
-    margin-top: 90px;
+  :root {
+    --sectionGap: 90px;
   }
 
   .sectionHead {
@@ -3448,8 +3455,12 @@ html.loaded .card.main {
   }
 
   .pageNav {
-    margin: 0 -18px 40px;
-    padding: 16px 20px;
+    /* Fill the whole main-content surface when the sticky backdrop appears:
+       from the rail/content seam to the canvas's right edge. The matching
+       padding keeps the controls aligned with the page content. */
+    margin: 0 calc(-1 * var(--canvasPad)) 40px
+      calc(-1 * var(--railGap) / 2);
+    padding: 16px var(--canvasPad) 16px calc(var(--railGap) / 2);
     border-radius: 0 0 18px 18px;
   }
 
