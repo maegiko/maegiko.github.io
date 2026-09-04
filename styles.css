@@ -1,5 +1,5 @@
 /* styles.css */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
 
 :root {
   --bg0: #080a0f;
@@ -149,6 +149,14 @@
 * {
   box-sizing: border-box;
 }
+/* Form controls opt out of font inheritance by default - keep them on the
+   site typeface instead of the UA fallback. */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
 html,
 body {
   min-height: 100%;
@@ -169,7 +177,7 @@ body {
   flex-direction: column;
   position: relative;
   font-family:
-    "Inter",
+    "IBM Plex Sans",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -274,7 +282,8 @@ html.theme-crossfade body::before {
 .main {
   width: 100%;
   min-width: 0;
-  align-self: stretch;
+  /* hug the active pane instead of stretching to the sidebar's height */
+  align-self: start;
   padding: 12px 12px 16px;
   position: relative;
 }
@@ -337,7 +346,7 @@ html.theme-crossfade body::before {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 }
 .avatar span {
-  font-weight: 800;
+  font-weight: 600;
   font-size: 22px;
   letter-spacing: 0.5px;
 }
@@ -350,7 +359,8 @@ html.theme-crossfade body::before {
 .sideName {
   margin: 0;
   font-size: 31px;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.032em;
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -375,7 +385,7 @@ html.theme-crossfade body::before {
 }
 .statusLink {
   color: var(--text);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.28);
   padding-bottom: 1px;
@@ -419,12 +429,14 @@ html.theme-crossfade body::before {
 }
 .cK {
   color: var(--faint);
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
 }
 .cV {
   color: var(--text);
   font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
   display: block;
   margin-top: 3px;
@@ -493,6 +505,8 @@ html.theme-crossfade body::before {
   border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   transition:
     background 0.15s ease,
     color 0.15s ease;
@@ -502,6 +516,7 @@ html.theme-crossfade body::before {
   color: var(--text);
 }
 .tab.is-active {
+  font-weight: 500;
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: color-mix(in srgb, var(--accent) 38%, var(--stroke2));
   color: var(--accent);
@@ -667,7 +682,8 @@ html.theme-crossfade body::before {
 .h2 {
   margin: 2px 0 10px;
   font-size: 30px;
-  letter-spacing: -0.015em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   position: relative;
 }
 
@@ -686,7 +702,7 @@ html.theme-crossfade body::before {
   margin: 0 0 12px;
   font-size: 14px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 500;
 }
 .lead {
   margin: 0 0 14px;
@@ -771,7 +787,7 @@ html.theme-crossfade body::before {
   line-height: 1;
 }
 .chipTitle {
-  font-weight: 650;
+  font-weight: 500;
   font-size: 13px;
 }
 .chipText {
@@ -856,7 +872,7 @@ html.theme-crossfade body::before {
   transform: translateX(-50%);
   color: color-mix(in srgb, var(--code-subtext) 68%, transparent);
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 500;
   letter-spacing: 0.01em;
 }
 
@@ -888,6 +904,7 @@ html.theme-crossfade body::before {
   overflow-x: hidden;
   white-space: normal;
   font-family:
+    "IBM Plex Mono",
     "SFMono-Regular",
     "Cascadia Code",
     "Roboto Mono",
@@ -902,6 +919,7 @@ html.theme-crossfade body::before {
   position: relative;
   display: block;
   white-space: normal;
+  font-family: inherit;
 }
 
 .codeLine {
@@ -1015,13 +1033,14 @@ html.theme-crossfade body::before {
   gap: 0;
   padding: 0 18px 16px;
   font-family:
+    "IBM Plex Mono",
     "SFMono-Regular",
     "Cascadia Code",
     "Roboto Mono",
     Consolas,
     monospace;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1;
   white-space: nowrap;
 }
@@ -1096,7 +1115,7 @@ html.theme-crossfade body::before {
     /* outer soft ring */ 0 0 16px var(--accent); /* glow */
 }
 .tTop {
-  font-weight: 650;
+  font-weight: 500;
   font-size: 13px;
 }
 .tText {
@@ -1114,7 +1133,7 @@ html.theme-crossfade body::before {
   padding: 12px;
 }
 .calloutTitle {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 13px;
   margin-bottom: 4px;
 }
@@ -1155,6 +1174,7 @@ html.theme-crossfade body::before {
 .resumeTitle {
   margin: 0;
   font-size: 14px;
+  font-weight: 500;
   color: var(--muted);
   letter-spacing: 0.02em;
 }
@@ -1227,7 +1247,7 @@ html.theme-crossfade body::before {
   margin-bottom: 8px;
 }
 .t2Role {
-  font-weight: 720;
+  font-weight: 500;
   font-size: 13px;
   color: var(--text);
 }
@@ -1324,9 +1344,9 @@ html.theme-crossfade body::before {
 .skillGroupLabel {
   color: var(--faint);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 @media (max-width: 560px) {
@@ -1479,6 +1499,7 @@ html.theme-crossfade body::before {
 .projTitle {
   margin: 0;
   font-size: 14px;
+  font-weight: 500;
 }
 .projMeta {
   color: var(--faint);
@@ -1677,6 +1698,7 @@ html.theme-crossfade body::before {
 .modalProjectTitle {
   margin: 0;
   font-size: 24px;
+  font-weight: 600;
   line-height: 1.18;
   letter-spacing: -0.015em;
 }
@@ -1869,6 +1891,7 @@ textarea:focus {
 
 .tab > b {
   display: block;
+  font-weight: inherit;
   transform: translate3d(var(--magnetX), var(--magnetY), 0);
   transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -3137,7 +3160,7 @@ html.loaded .card.main {
   }
 
   .cK {
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .cV {
