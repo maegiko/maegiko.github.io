@@ -1360,39 +1360,35 @@ html.theme-crossfade body::before {
 .t2Tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  column-gap: 18px;
+  row-gap: 10px;
   margin-top: 8px;
 }
+/* Inline tech items: brand icon + label, no pill chrome. */
 .t2Tag,
 .tag {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  overflow: hidden;
-}
-.t2Tag {
-  border: 1px solid var(--stroke2);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 999px;
-  padding: 6px 9px 6px 7px;
+  gap: 7px;
   color: var(--muted);
   font-size: 12px;
+  font-weight: 400;
 }
 .t2TagIcon {
   position: relative;
   z-index: 1;
-  width: 19px;
-  height: 19px;
-  flex: 0 0 19px;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   display: inline-grid;
   place-items: center;
   color: rgba(255, 255, 255, 0.58);
   line-height: 1;
 }
 .t2TagIcon svg {
-  width: 17px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
   display: block;
   fill: none;
   stroke: currentColor;
@@ -1401,8 +1397,8 @@ html.theme-crossfade body::before {
   stroke-linejoin: round;
 }
 .t2TagIcon .brandIconImg {
-  width: 17px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
   display: block;
   object-fit: contain;
 }
@@ -1421,7 +1417,8 @@ html.theme-crossfade body::before {
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  column-gap: 18px;
+  row-gap: 10px;
 }
 .skillGroups {
   display: grid;
@@ -1449,14 +1446,6 @@ html.theme-crossfade body::before {
   .skillSupplemental {
     display: none;
   }
-}
-.tag {
-  border: 1px solid var(--stroke2);
-  background: rgba(255, 255, 255, 0.035);
-  border-radius: 999px;
-  padding: 7px 10px 7px 8px;
-  color: var(--muted);
-  font-size: 12px;
 }
 
 .projectsBoard {
@@ -1927,60 +1916,7 @@ textarea:focus {
   }
 }
 
-/* Softer liquid glass pills */
-.tag,
-.t2Tag {
-  background:
-    radial-gradient(
-      140% 140% at 30% 20%,
-      rgba(255, 255, 255, 0.1),
-      transparent 45%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(33, 36, 46, 0.95),
-      rgba(22, 25, 34, 0.92)
-    );
-
-  border: 1px solid rgba(255, 255, 255, 0.16);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.26),
-    0 2px 6px rgba(0, 0, 0, 0.28);
-
-  transition:
-    transform 0.12s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-/* Much gentler sheen */
-.tag::after,
-.t2Tag::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.24),
-    rgba(255, 255, 255, 0)
-  );
-  opacity: 0.3;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Subtle hover lift */
-.tag:hover,
-.t2Tag:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 4px 10px rgba(0, 0, 0, 0.32);
-}
-
-/* Glass tabs */
+/* Softer liquid glass pills *//* Much gentler sheen *//* Subtle hover lift *//* Glass tabs */
 .tab {
   --magnetX: 0px;
   --magnetY: 0px;
@@ -2267,8 +2203,6 @@ html.loaded .card.main {
 /* Light mode: make small surfaces visible via neutral dark translucency */
 :root.light .btn,
 :root.light .tab,
-:root.light .tag,
-:root.light .t2Tag,
 :root.light .sideRole,
 :root.light .contactTile,
 :root.light .cIcon,
@@ -2281,8 +2215,6 @@ html.loaded .card.main {
 
 :root.light .btn:hover,
 :root.light .tab:hover,
-:root.light .tag:hover,
-:root.light .t2Tag:hover,
 :root.light .contactTile:hover,
 :root.light .modalClose:hover {
   background: var(--surfaceHover);
@@ -2306,8 +2238,6 @@ html.loaded .card.main {
 /* Light mode: pill/tabs glass gradients should be neutral (not white-on-white) */
 
 :root.light .tab,
-:root.light .tag,
-:root.light .t2Tag,
 :root.light .modalClose {
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow:
@@ -2324,8 +2254,6 @@ html.loaded .card.main {
 }
 
 .tab,
-.tag,
-.t2Tag,
 .sideRole {
   border-color: transparent;
   background:
@@ -2340,25 +2268,7 @@ html.loaded .card.main {
     var(--pillOutline) border-box;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
-
-.tag,
-.t2Tag {
-  background:
-    radial-gradient(
-        140% 140% at 30% 20%,
-        rgba(255, 255, 255, 0.1),
-        transparent 45%
-      )
-      padding-box,
-    linear-gradient(180deg, rgba(33, 36, 46, 0.95), rgba(22, 25, 34, 0.92))
-      padding-box,
-    var(--pillOutline) border-box;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
-}
-
-.tab:hover,
-.tag:hover,
-.t2Tag:hover {
+.tab:hover {
   background:
     radial-gradient(
         140% 140% at 30% 20%,
@@ -2411,8 +2321,6 @@ html.loaded .card.main {
 }
 
 :root.light .tab,
-:root.light .tag,
-:root.light .t2Tag,
 :root.light .sideRole {
   border-color: transparent;
   background:
@@ -2427,21 +2335,7 @@ html.loaded .card.main {
     var(--pillOutline) border-box;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
-
-:root.light .tag,
-:root.light .t2Tag {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(0, 0, 0, 0.025))
-      padding-box,
-    var(--pillOutline) border-box;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-:root.light .tab:hover,
-:root.light .tag:hover,
-:root.light .t2Tag:hover {
+:root.light .tab:hover {
   background:
     radial-gradient(
         140% 140% at 30% 20%,
@@ -2454,18 +2348,6 @@ html.loaded .card.main {
     var(--pillOutline) border-box;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
-:root.light .tag:hover,
-:root.light .t2Tag:hover {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(0, 0, 0, 0.035))
-      padding-box,
-    var(--pillOutline) border-box;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    0 5px 14px rgba(0, 0, 0, 0.07);
-}
-
 :root.light .tab.is-active {
   border-color: transparent;
   background:
@@ -2504,9 +2386,7 @@ html.loaded .card.main {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.tab::after,
-.tag::after,
-.t2Tag::after {
+.tab::after {
   display: none;
 }
 
@@ -2962,8 +2842,6 @@ html.loaded .card.main {
     0 7px 18px rgba(0, 0, 0, 0.1);
 }
 
-:root.light .tag,
-:root.light .t2Tag,
 :root.light .sideRole {
   border-color: transparent;
   background:
@@ -2979,23 +2857,6 @@ html.loaded .card.main {
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.045),
     0 5px 14px rgba(0, 0, 0, 0.065);
-}
-
-:root.light .tag:hover,
-:root.light .t2Tag:hover {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(242, 244, 247, 0.56))
-      padding-box,
-    linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.085),
-        rgba(255, 255, 255, 0.24) 58%,
-        rgba(0, 0, 0, 0.085)
-      )
-      border-box;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.045),
-    0 6px 16px rgba(0, 0, 0, 0.075);
 }
 
 @media (max-width: 720px) {
