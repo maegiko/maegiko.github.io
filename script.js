@@ -37,7 +37,7 @@
     history.scrollRestoration = "manual";
   }
 
-  const filters = document.querySelectorAll(".filter");
+  const filters = document.querySelectorAll(".projFilter");
   const projects = document.querySelectorAll(".project");
   const projectModal = document.getElementById("projectModal");
   const modalCard = projectModal?.querySelector(".projectModalCard");
