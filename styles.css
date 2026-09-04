@@ -69,6 +69,24 @@
   --canvasSurface: rgba(197, 220, 255, 0.028);
   --canvasEdge: rgba(197, 220, 255, 0.09);
   --canvasShade: rgba(3, 5, 9, 0.55);
+  /* Both ends fade to the same hue at zero alpha - interpolating through
+     `transparent` would dip through grey and show as a smudge. */
+  --canvasSheen: linear-gradient(
+    90deg,
+    rgba(197, 220, 255, 0) 0%,
+    rgba(197, 220, 255, 0.024) 50%,
+    rgba(197, 220, 255, 0) 100%
+  );
+  --sectionSheen: radial-gradient(
+    72% 100% at 50% 0%,
+    rgba(197, 220, 255, 0.03) 0%,
+    rgba(197, 220, 255, 0) 72%
+  );
+  --canvasGrain: 0.02;
+  --canvasPad: clamp(18px, 3.4vw, 48px);
+  /* The rail's own surface: a shade under the canvas, plus the seam that
+     softens where it meets the content column. */
+  --railSurface: rgba(0, 0, 0, 0.3);
 
   --pageBg: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
 
@@ -150,6 +168,19 @@
   --canvasSurface: rgba(255, 255, 255, 0.62);
   --canvasEdge: rgba(0, 0, 0, 0.08);
   --canvasShade: rgba(0, 0, 0, 0.06);
+  --canvasSheen: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --sectionSheen: radial-gradient(
+    72% 100% at 50% 0%,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 72%
+  );
+  --canvasGrain: 0.026;
+  --railSurface: rgba(0, 0, 0, 0.014);
 
   --pageBg: var(--bg0);
 
@@ -241,17 +272,34 @@ html.theme-crossfade body::before {
   min-height: 100dvh;
   width: min(100%, var(--canvasMax));
   margin: 0 auto;
-  padding: 30px clamp(18px, 3.4vw, 48px) 34px;
+  padding: 30px var(--canvasPad) 34px;
   background:
+    var(--canvasSheen),
     linear-gradient(var(--canvasSurface), var(--canvasSurface)),
     var(--pageBg);
   border-inline: 1px solid var(--canvasEdge);
-  box-shadow:
-    inset 28px 0 36px -32px var(--canvasShade),
-    inset -28px 0 36px -32px var(--canvasShade);
+  /* Short on purpose. This is only a few levels of shading, so spreading it
+     over a long falloff quantises into 1-level contours far enough apart to
+     read as vertical lines. Compressed to ~8px the same steps land about a
+     pixel apart and read as the gradient they are meant to be. */
+  box-shadow: inset -10px 0 12px -10px var(--canvasShade);
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
   gap: 44px;
+}
+
+/* Grain, laid over the canvas ground and under everything in flow. A negative
+   z-index keeps it there: .shell is a stacking context, so this paints just
+   above its background and never over the content. */
+.shell::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--canvasGrain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 /* Narrow enough and the canvas runs full bleed, so its edges would only hug
@@ -834,9 +882,20 @@ html.theme-crossfade body::before {
 
 .pane {
   display: block;
+  position: relative;
   width: 100%;
   padding: 0;
   scroll-margin-top: 82px;
+}
+
+.pane::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -46px -7% auto;
+  height: 360px;
+  pointer-events: none;
+  background: var(--sectionSheen);
 }
 /* Section spacing now lives on the sections themselves. */
 .pane + .pane {
@@ -3261,6 +3320,8 @@ html.loaded .card.main {
 @media (min-width: 1112px) {
   :root {
     --canvasMax: 1356px;
+    --railW: 232px;
+    --railGap: 126px;
     --pad: 22px;
     --radius: 22px;
     --radius2: 17px;
@@ -3274,10 +3335,27 @@ html.loaded .card.main {
        against the gutter the way the cards end against the opposite one. The
        slack that used to sit inside the track lives in the column gap now, so
        nothing changes size - the rail just stops floating. */
-    grid-template-columns: 232px minmax(0, 1fr);
-    gap: 126px;
+    grid-template-columns: var(--railW) minmax(0, 1fr);
+    gap: var(--railGap);
     padding-top: 36px;
     padding-bottom: 48px;
+  }
+
+  /* The rail's surface: a full-height band under the whole sidebar column,
+     ending halfway across the gap so the rail and the content each keep the
+     same breathing room from the seam. z-index -2 puts it beneath the grain
+     and the section lifts but still above the canvas ground, and the flat
+     tone lets the canvas's own left edge shading read through it. */
+  .shell::after {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    inset: 0 auto 0 0;
+    width: calc(var(--canvasPad) + var(--railW) + var(--railGap) / 2);
+    pointer-events: none;
+    /* A flat tone meeting the canvas at a clean edge. No falloff and no
+       shadow: the tone change is the divider. */
+    background: var(--railSurface);
   }
 
   .side {

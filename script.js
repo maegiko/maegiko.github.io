@@ -1131,7 +1131,7 @@
         speed: Math.random() * 0.00055 + 0.00025,
         drift: Math.random() * 10 + 4,
         depth: Math.random() * 0.7 + 0.3,
-        twinkle: Math.random() * 0.28 + 0.35,
+        twinkle: Math.random() * 0.3 + 0.4,
         rotationVariation: Math.random() * 0.08 + 0.08,
       };
     }
@@ -1246,8 +1246,8 @@
           ? 0
           : Math.sin(time * 0.0016 + star.phase) * 0.18);
       const color = isLight
-        ? `rgba(40, 40, 60, ${Math.max(0.18, alpha * 0.6)})`
-        : `rgba(255, 255, 255, ${Math.max(0.18, alpha)})`;
+        ? `rgba(40, 40, 60, ${Math.max(0.22, alpha * 0.6)})`
+        : `rgba(255, 255, 255, ${Math.max(0.22, alpha)})`;
 
       ctx.save();
       ctx.translate(x, y);
