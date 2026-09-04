@@ -61,7 +61,16 @@
   --radius: 18px;
   --radius2: 14px;
   --pad: 18px;
-  --max: 1100px;
+
+  /* Central canvas: the sheet the whole page sits on, one step above the
+     star field and one step below the cards. Wide enough for the content plus
+     an even gutter all the way round it. */
+  --canvasMax: 1152px;
+  --canvasSurface: rgba(197, 220, 255, 0.028);
+  --canvasEdge: rgba(197, 220, 255, 0.09);
+  --canvasShade: rgba(3, 5, 9, 0.55);
+
+  --pageBg: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
 
   --ring: 0 0 0 3px rgba(255, 255, 255, 0.18);
   color-scheme: dark;
@@ -137,6 +146,13 @@
   --surface: rgba(0, 0, 0, 0.035);
   --surfaceHover: rgba(0, 0, 0, 0.055);
 
+  /* Light page is already pale - the canvas reads by going whiter. */
+  --canvasSurface: rgba(255, 255, 255, 0.62);
+  --canvasEdge: rgba(0, 0, 0, 0.08);
+  --canvasShade: rgba(0, 0, 0, 0.06);
+
+  --pageBg: var(--bg0);
+
   --ring: 0 0 0 3px rgba(0, 0, 0, 0.14);
   color-scheme: light;
 
@@ -167,7 +183,7 @@ html {
   scroll-behavior: smooth;
 }
 :root:not(.light) html {
-  background: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
+  background: var(--pageBg);
 }
 body {
   margin: 0;
@@ -189,11 +205,7 @@ body {
     "Apple Color Emoji",
     "Segoe UI Emoji";
   color: var(--text);
-  background: var(--bg0);
-}
-
-:root:not(.light) body {
-  background: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
+  background: var(--pageBg);
 }
 
 html.theme-crossfade body::before {
@@ -215,16 +227,40 @@ html.theme-crossfade body::before {
   }
 }
 
+/* The central canvas: one full-height section holding the identity rail and
+   the scrolling page. It lifts a hair off the star field so the depth order
+   reads outer sky -> canvas -> foreground cards. Straight vertical edges on
+   purpose - this is a sheet the page sits on, not a giant rounded card.
+   Its background repaints the page gradient opaquely, so stars pass behind the
+   canvas rather than across it, and the gutter is fluid so the sheet keeps its
+   breathing room as the viewport narrows. */
 .shell {
   position: relative;
   z-index: 1;
-  width: min(100%, var(--max));
-  max-width: var(--max);
-  margin: 28px auto;
-  padding: 0 18px;
+  flex: 1 0 auto;
+  min-height: 100dvh;
+  width: min(100%, var(--canvasMax));
+  margin: 0 auto;
+  padding: 30px clamp(18px, 3.4vw, 48px) 34px;
+  background:
+    linear-gradient(var(--canvasSurface), var(--canvasSurface)),
+    var(--pageBg);
+  border-inline: 1px solid var(--canvasEdge);
+  box-shadow:
+    inset 28px 0 36px -32px var(--canvasShade),
+    inset -28px 0 36px -32px var(--canvasShade);
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
   gap: 44px;
+}
+
+/* Narrow enough and the canvas runs full bleed, so its edges would only hug
+   the viewport - drop them and let the surface carry the section on its own. */
+@media (max-width: 1111px) {
+  .shell {
+    border-inline-color: transparent;
+    box-shadow: none;
+  }
 }
 
 .bg {
@@ -540,7 +576,9 @@ html.theme-crossfade body::before {
 /* Only once it lifts off the top does it need to hide what passes beneath. */
 .pageNav.is-stuck {
   background: var(--bg0);
-  background: color-mix(in srgb, var(--bg0) 97%, transparent);
+  background:
+    linear-gradient(var(--canvasSurface), var(--canvasSurface)),
+    color-mix(in srgb, var(--bg0) 97%, transparent);
   backdrop-filter: blur(18px) saturate(1.05);
   -webkit-backdrop-filter: blur(18px) saturate(1.05);
 }
@@ -3137,7 +3175,7 @@ html.loaded .card.main {
 
 @media (max-width: 420px) {
   .shell {
-    padding: 0 10px;
+    padding-inline: 12px;
   }
 
   .side {
@@ -3242,17 +3280,24 @@ html.loaded .card.main {
 
 @media (min-width: 1112px) {
   :root {
-    --max: 1360px;
+    --canvasMax: 1356px;
     --pad: 22px;
     --radius: 22px;
     --radius2: 17px;
   }
 
+  /* Reserving 48px of sky either side keeps the canvas off the window edges,
+     so the star field always has somewhere to show. */
   .shell {
-    grid-template-columns: 420px minmax(0, 1fr);
-    gap: 54px;
-    margin: 36px auto;
-    padding: 0 22px;
+    width: min(100% - 96px, var(--canvasMax));
+    /* The rail track is the width of the rail itself, so its rules start hard
+       against the gutter the way the cards end against the opposite one. The
+       slack that used to sit inside the track lives in the column gap now, so
+       nothing changes size - the rail just stops floating. */
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 126px;
+    padding-top: 36px;
+    padding-bottom: 48px;
   }
 
   .side {
@@ -3311,8 +3356,10 @@ html.loaded .card.main {
     font-size: 14px;
   }
 
+  /* The rail column is the measure now, so the rules run its full width and
+     start flush against the canvas gutter. */
   .railRows {
-    max-width: 216px;
+    max-width: none;
   }
 
   .railRow {

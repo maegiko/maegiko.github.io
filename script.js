@@ -1091,18 +1091,18 @@
         : Math.max(38, Math.min(82, Math.floor(area / 20000)));
     }
 
-    /* Stars belong to the negative space: placement avoids the two content
-       columns, and any that still drift over them are dimmed. */
+    /* Stars belong to the sky outside the central canvas, which is opaque and
+       simply hides anything that drifts behind it. Placement steers clear of
+       that band so the density stays where it can actually be seen. */
     let contentBands = [];
 
     function measureContentBands() {
-      const margin = 16;
-      contentBands = [".side", ".page"]
+      contentBands = [".shell"]
         .map((selector) => document.querySelector(selector))
         .filter(Boolean)
         .map((element) => {
           const rect = element.getBoundingClientRect();
-          return [rect.left - margin, rect.right + margin];
+          return [rect.left, rect.right];
         });
     }
 
@@ -1240,16 +1240,14 @@
       y = star.y + driftY;
 
       const isLight = root.classList.contains("light");
-      const overContent = isOverContent(x) ? 0.6 : 1;
       const alpha =
-        (star.twinkle +
-          (reduceMotion.matches
-            ? 0
-            : Math.sin(time * 0.0016 + star.phase) * 0.18)) *
-        overContent;
+        star.twinkle +
+        (reduceMotion.matches
+          ? 0
+          : Math.sin(time * 0.0016 + star.phase) * 0.18);
       const color = isLight
-        ? `rgba(40, 40, 60, ${Math.max(0.18 * overContent, alpha * 0.6)})`
-        : `rgba(255, 255, 255, ${Math.max(0.18 * overContent, alpha)})`;
+        ? `rgba(40, 40, 60, ${Math.max(0.18, alpha * 0.6)})`
+        : `rgba(255, 255, 255, ${Math.max(0.18, alpha)})`;
 
       ctx.save();
       ctx.translate(x, y);
