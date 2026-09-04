@@ -1241,42 +1241,40 @@ html.theme-crossfade body::before {
 .resumeBlockHead {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 9px;
+  margin-bottom: 14px;
 }
+/* the icon sits inline with the label - no container */
 .resumeIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--stroke2);
-  background: rgba(255, 255, 255, 0.035);
   color: var(--accent);
 }
 .resumeIcon svg {
   display: block;
+  width: 16px;
+  height: 16px;
 }
 :root.light .resumeIcon {
   color: rgba(10, 12, 16, 0.78);
 }
 .resumeTitle {
   margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.02em;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.005em;
 }
 
 .timeline2 {
   display: grid;
-  gap: 12px;
+  gap: 26px;
 }
 .t2Item {
   display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 12px;
+  grid-template-columns: 9px 1fr;
+  gap: 14px;
 }
 .t2Rail {
   display: flex;
@@ -1284,76 +1282,59 @@ html.theme-crossfade body::before {
   align-items: center;
 }
 .t2Dot {
-  width: 10px;
-  height: 10px;
-  min-width: 10px;
-  flex: 0 0 10px;
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  flex: 0 0 6px;
   aspect-ratio: 1;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow:
-    0 0 0 4px var(--accent-glow),
-    /* soft halo */ 0 0 18px var(--accent); /* glow */
-  margin-top: 6px;
-  animation: tDotBreathe 1.6s ease-in-out infinite;
-  transform-origin: center;
-}
-
-:root.light .t2Dot {
-  background: var(--accent);
-  box-shadow:
-    0 0 0 4px var(--accent-glow),
-    /* soft halo */ 0 0 18px var(--accent); /* glow */
+  margin-top: 8px;
 }
 .t2Line {
-  width: 2px;
+  width: 1px;
   flex: 1;
-  margin-top: 8px;
-  border-radius: 2px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.22),
-    rgba(255, 255, 255, 0.06)
-  );
+  margin-top: 7px;
+  background: var(--line);
 }
 
-:root.light .t2Line {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 12, 16, 0.18),
-    rgba(10, 12, 16, 0.06)
-  );
-}
-
-.t2Card {
-  border: 1px solid var(--stroke2);
-  background: rgba(22, 25, 34, 0.82);
-  border-radius: 14px;
-  padding: 12px;
-}
-.t2Top {
+.t2Body {
   display: grid;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 2px;
 }
 .t2Role {
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+:root.light .t2Role {
+  color: rgba(20, 20, 22, 0.85);
 }
 .t2Meta {
   color: var(--faint);
   font-size: 12px;
+  font-weight: 400;
 }
 
-.t2Bullets {
-  margin: 0;
-  padding-left: 18px;
+.t2Org {
   color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+.t2Note {
+  margin: 6px 0 0;
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.t2Bullets {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: color-mix(in srgb, var(--muted) 80%, transparent);
 }
 .t2Bullets li {
-  margin: 6px 0;
-  line-height: 1.45;
+  margin: 5px 0;
+  line-height: 1.55;
   font-size: 13px;
 }
 
@@ -3232,7 +3213,7 @@ html.loaded .card.main {
   .codeBlock {
     --line-number-width: 54px;
     padding: 18px 22px 22px 0;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.34;
   }
 
@@ -3249,16 +3230,35 @@ html.loaded .card.main {
     padding: 18px;
   }
 
-  .h3,
-  .resumeTitle {
+  .h3 {
     font-size: 16px;
   }
 
-  .chipIcon,
-  .resumeIcon {
+  .resumeTitle {
+    font-size: 17px;
+  }
+
+  .t2Role {
+    font-size: 16px;
+  }
+
+  .t2Org {
+    font-size: 14px;
+  }
+
+  .t2Bullets li {
+    font-size: 14px;
+  }
+
+  .chipIcon {
     width: 40px;
     height: 40px;
     border-radius: 13px;
+  }
+
+  .resumeIcon svg {
+    width: 18px;
+    height: 18px;
   }
 
   .chipIcon {
@@ -3269,8 +3269,6 @@ html.loaded .card.main {
   .chipTitle,
   .chipText,
   .currentlyTitle,
-  .t2Role,
-  .t2Bullets li,
   .projText {
     font-size: 15px;
   }
