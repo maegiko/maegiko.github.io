@@ -1397,33 +1397,7 @@
       "aria-label",
       isLight ? "Switch to dark" : "Switch to light",
     );
-
-    themeToggle.innerHTML = isLight
-      ? `
-      <svg class="themeIcon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
-    `
-      : `
-      <svg class="themeIcon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
-        <path d="M12 2v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M12 19v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M2 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M4.22 4.22l2.12 2.12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M17.66 17.66l2.12 2.12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M19.78 4.22l-2.12 2.12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        <path d="M6.34 17.66l-2.12 2.12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
-    `;
+    themeToggle.setAttribute("aria-checked", isLight ? "true" : "false");
   }
 
   function updateThemeChrome(isLight) {
