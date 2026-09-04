@@ -1510,7 +1510,9 @@ html.theme-crossfade body::before {
     ),
     linear-gradient(180deg, var(--panelA), var(--panelB) 55%, var(--panelC));
   border-radius: var(--radius2);
-  padding: 6px 14px 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
   box-shadow: var(--shadow2);
   overflow: hidden;
   cursor: pointer;
@@ -1589,6 +1591,11 @@ html.theme-crossfade body::before {
 .project .t2Tags {
   z-index: 1;
 }
+/* the tech stack anchors to the bottom of the card, whatever the copy length */
+.project .t2Tags {
+  margin-top: auto;
+  padding-top: 18px;
+}
 .projTitle {
   margin: 0;
   font-size: 17px;
@@ -1608,13 +1615,17 @@ html.theme-crossfade body::before {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
-  margin: 8px 0 14px;
+  margin: 12px 0 0;
 }
 .projLinks {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 6px;
+}
+/* a card with no links must not reserve the row */
+.projLinks:empty {
+  display: none;
 }
 .link {
   display: inline-flex;
