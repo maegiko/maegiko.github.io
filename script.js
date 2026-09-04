@@ -28,9 +28,7 @@
   const pageShell = document.querySelector(".shell");
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
-  const tabs = document.querySelectorAll(".tab");
-  const tabsContainer = document.querySelector(".tabs");
-  const tabIndicator = document.querySelector(".tabIndicator");
+  const navLinks = document.querySelectorAll(".navLink");
   const panes = document.querySelectorAll(".pane");
 
   if ("scrollRestoration" in history) {
@@ -1093,7 +1091,36 @@
         : Math.max(38, Math.min(82, Math.floor(area / 20000)));
     }
 
-    function createStar(x = Math.random() * width, y = Math.random() * height) {
+    /* Stars belong to the negative space: placement avoids the two content
+       columns, and any that still drift over them are dimmed. */
+    let contentBands = [];
+
+    function measureContentBands() {
+      const margin = 16;
+      contentBands = [".side", ".page"]
+        .map((selector) => document.querySelector(selector))
+        .filter(Boolean)
+        .map((element) => {
+          const rect = element.getBoundingClientRect();
+          return [rect.left - margin, rect.right + margin];
+        });
+    }
+
+    function isOverContent(x) {
+      return contentBands.some(([left, right]) => x >= left && x <= right);
+    }
+
+    function randomStarX() {
+      let x = Math.random() * width;
+
+      for (let attempt = 0; attempt < 5 && isOverContent(x); attempt += 1) {
+        x = Math.random() * width;
+      }
+
+      return x;
+    }
+
+    function createStar(x = randomStarX(), y = Math.random() * height) {
       return {
         x,
         y,
@@ -1139,6 +1166,7 @@
     }
 
     function resizeStarfield({ preserveStars = true } = {}) {
+      measureContentBands();
       const previousWidth = width;
       const previousHeight = height;
 
@@ -1212,14 +1240,16 @@
       y = star.y + driftY;
 
       const isLight = root.classList.contains("light");
+      const overContent = isOverContent(x) ? 0.6 : 1;
       const alpha =
-        star.twinkle +
-        (reduceMotion.matches
-          ? 0
-          : Math.sin(time * 0.0016 + star.phase) * 0.18);
+        (star.twinkle +
+          (reduceMotion.matches
+            ? 0
+            : Math.sin(time * 0.0016 + star.phase) * 0.18)) *
+        overContent;
       const color = isLight
-        ? `rgba(40, 40, 60, ${Math.max(0.18, alpha * 0.6)})`
-        : `rgba(255, 255, 255, ${Math.max(0.18, alpha)})`;
+        ? `rgba(40, 40, 60, ${Math.max(0.18 * overContent, alpha * 0.6)})`
+        : `rgba(255, 255, 255, ${Math.max(0.18 * overContent, alpha)})`;
 
       ctx.save();
       ctx.translate(x, y);
@@ -1422,26 +1452,6 @@
     window.dispatchEvent(new CustomEvent("asciiAvatar:themechange"));
   });
 
-  function updateTabIndicator() {
-    if (!tabsContainer || !tabIndicator) return;
-
-    const activeTab = tabsContainer.querySelector(".tab.is-active");
-    if (!activeTab) {
-      tabsContainer.style.setProperty("--tabIndicatorOpacity", "0");
-      return;
-    }
-
-    const inset = Math.min(12, activeTab.offsetWidth * 0.18);
-    const width = Math.max(18, activeTab.offsetWidth - inset * 2);
-    const x = activeTab.offsetLeft + inset;
-    const y = activeTab.offsetTop + activeTab.offsetHeight + 4;
-
-    tabsContainer.style.setProperty("--tabIndicatorX", `${x}px`);
-    tabsContainer.style.setProperty("--tabIndicatorWidth", `${width}px`);
-    tabsContainer.style.setProperty("--tabIndicatorTop", `${y}px`);
-    tabsContainer.style.setProperty("--tabIndicatorOpacity", "1");
-  }
-
   const aboutLead = document.querySelector("#about .lead");
   const aboutLeadText =
     aboutLead?.textContent.trim().replace(/\s+/g, " ") ?? "";
@@ -1584,133 +1594,95 @@
     }, totalDuration + 80);
   }
 
-  const validTabIds = new Set(Array.from(panes, (pane) => pane.id));
+  /* Sections reveal themselves as they scroll into view: the header lands
+     first, then whatever staggered cards the section holds. */
+  const sectionRunners = {
+    about: () => {
+      window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
+      animateAboutLead();
+    },
+    projects: animateProjectCards,
+    resume: animateResumeBlocks,
+  };
+  const revealedPanes = new WeakSet();
 
-  function getRouteTabId() {
-    const id = location.hash.replace("#", "");
-    return validTabIds.has(id) ? id : "about";
+  function revealSection(pane) {
+    if (revealedPanes.has(pane)) return;
+    revealedPanes.add(pane);
+
+    pane.classList.add("is-revealed");
+    const run = sectionRunners[pane.id];
+    if (run) requestAnimationFrame(run);
   }
 
-  function setTab(id, { updateHash = true } = {}) {
-    if (!validTabIds.has(id)) return;
+  function setupSectionReveals() {
+    if (!("IntersectionObserver" in window)) {
+      panes.forEach(revealSection);
+      return;
+    }
 
-    const currentTab = document.querySelector(".tab.is-active")?.dataset.tab;
-    tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === id));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          revealSection(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -18% 0px", threshold: 0.12 },
+    );
 
-    panes.forEach((p) => p.classList.toggle("is-active", p.id === id));
-    requestAnimationFrame(updateTabIndicator);
+    panes.forEach((pane) => observer.observe(pane));
+  }
 
-    if (id === "about") {
-      requestAnimationFrame(() => {
-        window.dispatchEvent(new CustomEvent("asciiAvatar:reveal"));
-        animateAboutLead();
+  /* The nav underlines whichever section is currently under it. */
+  function setupScrollSpy() {
+    if (!navLinks.length || !panes.length) return;
+
+    const pageNav = document.querySelector(".pageNav");
+    const sections = Array.from(panes);
+    let frameId = null;
+
+    function sync() {
+      frameId = null;
+
+      pageNav?.classList.toggle("is-stuck", window.scrollY > 4);
+
+      const line = window.scrollY + 110;
+      let activeId = sections[0].id;
+
+      sections.forEach((section) => {
+        const top = section.getBoundingClientRect().top + window.scrollY;
+        if (top <= line) activeId = section.id;
       });
-    }
 
-    if (id === "projects") {
-      animateProjectCards();
-    }
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      if (atBottom) activeId = sections[sections.length - 1].id;
 
-    if (id === "resume") {
-      animateResumeBlocks();
-    }
-
-    if (updateHash && currentTab !== id) {
-      history.pushState(null, "", `#${id}`);
-    }
-  }
-
-  tabs.forEach((t) => t.addEventListener("click", () => setTab(t.dataset.tab)));
-
-  function setupMagneticTabs() {
-    if (prefersReducedMotion.matches) return;
-
-    const strength = 0.16;
-    const maxShift = 4;
-
-    tabs.forEach((tab) => {
-      let frameId = null;
-      let targetX = 0;
-      let targetY = 0;
-      let currentX = 0;
-      let currentY = 0;
-      let glow = 0;
-      let targetGlow = 0;
-
-      function render() {
-        currentX += (targetX - currentX) * 0.22;
-        currentY += (targetY - currentY) * 0.22;
-        glow += (targetGlow - glow) * 0.2;
-
-        tab.style.setProperty("--magnetX", `${currentX.toFixed(2)}px`);
-        tab.style.setProperty("--magnetY", `${currentY.toFixed(2)}px`);
-        tab.style.setProperty("--magnetGlow", glow.toFixed(3));
-
-        const settled =
-          Math.abs(targetX - currentX) < 0.02 &&
-          Math.abs(targetY - currentY) < 0.02 &&
-          Math.abs(targetGlow - glow) < 0.01;
-
-        if (settled) {
-          currentX = targetX;
-          currentY = targetY;
-          glow = targetGlow;
-          tab.style.setProperty("--magnetX", `${currentX.toFixed(2)}px`);
-          tab.style.setProperty("--magnetY", `${currentY.toFixed(2)}px`);
-          tab.style.setProperty("--magnetGlow", glow.toFixed(3));
-          frameId = null;
-          return;
+      /* Safety net: nothing may stay hidden once it is well inside view. */
+      const revealLine = window.innerHeight * 0.85;
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top < revealLine) {
+          revealSection(section);
         }
-
-        frameId = requestAnimationFrame(render);
-      }
-
-      function start() {
-        if (frameId === null) frameId = requestAnimationFrame(render);
-      }
-
-      tab.addEventListener("pointermove", (event) => {
-        const rect = tab.getBoundingClientRect();
-        const x = event.clientX - (rect.left + rect.width / 2);
-        const y = event.clientY - (rect.top + rect.height / 2);
-
-        targetX = Math.max(-maxShift, Math.min(maxShift, x * strength));
-        targetY = Math.max(-maxShift, Math.min(maxShift, y * strength));
-        targetGlow = 1;
-        start();
       });
 
-      tab.addEventListener("pointerleave", () => {
-        targetX = 0;
-        targetY = 0;
-        targetGlow = 0;
-        start();
-      });
-    });
-  }
+      navLinks.forEach((link) =>
+        link.classList.toggle("is-active", link.dataset.nav === activeId),
+      );
+    }
 
-  setupMagneticTabs();
+    function schedule() {
+      if (frameId !== null) return;
+      frameId = requestAnimationFrame(sync);
+    }
 
-  function keepInitialHashRouteAtTop(target) {
-    const resetScroll = () => {
-      window.scrollTo(0, 0);
-      document.scrollingElement?.scrollTo(0, 0);
-
-      for (let el = target; el; el = el.parentElement) {
-        el.scrollTop = 0;
-        el.scrollLeft = 0;
-      }
-    };
-
-    resetScroll();
-    requestAnimationFrame(resetScroll);
-    window.addEventListener("load", resetScroll, {
-      once: true,
-    });
-    window.addEventListener("pageshow", resetScroll, {
-      once: true,
-    });
-    setTimeout(resetScroll, 80);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    window.addEventListener("hashchange", schedule);
+    sync();
   }
 
   function setupDynamicCodeLineNumbers() {
@@ -1773,23 +1745,8 @@
     }
   }
 
-  const initialTabId = getRouteTabId();
-  const initialHashTarget =
-    location.hash && document.getElementById(initialTabId);
-
-  if (initialHashTarget) {
-    setTab(initialTabId, { updateHash: false });
-    keepInitialHashRouteAtTop(initialHashTarget);
-  } else {
-    setTab("about", { updateHash: false });
-  }
-
-  window.addEventListener("popstate", () => {
-    setTab(getRouteTabId(), { updateHash: false });
-  });
-
-  window.addEventListener("resize", updateTabIndicator);
-  requestAnimationFrame(updateTabIndicator);
+  setupSectionReveals();
+  setupScrollSpy();
   setupDynamicCodeLineNumbers();
 
   // Filters
@@ -1915,7 +1872,8 @@
     document.body.classList.remove("modal-open");
     document.body.style.removeProperty("--scrollLockY");
     document.body.style.removeProperty("--scrollLockGap");
-    window.scrollTo(0, scrollLockOffset);
+    /* jump back - smooth scrolling would animate the restore */
+    window.scrollTo({ top: scrollLockOffset, behavior: "instant" });
   }
 
   function openProjectModal(project) {

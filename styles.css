@@ -1,5 +1,5 @@
 /* styles.css */
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap");
 
 :root {
   --bg0: #080a0f;
@@ -164,6 +164,7 @@ body {
 }
 html {
   background: var(--bg0);
+  scroll-behavior: smooth;
 }
 :root:not(.light) html {
   background: linear-gradient(180deg, var(--bg1), var(--bg0) 42%, #05070b);
@@ -223,7 +224,7 @@ html.theme-crossfade body::before {
   padding: 0 18px;
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
-  gap: 18px;
+  gap: 44px;
 }
 
 .bg {
@@ -273,24 +274,68 @@ html.theme-crossfade body::before {
 }
 
 .side {
-  padding: var(--pad);
+  --railPad: 4px;
+  padding: 0;
   position: sticky;
   top: 18px;
   align-self: start;
   height: fit-content;
 }
-.main {
+.page {
   width: 100%;
   min-width: 0;
-  /* hug the active pane instead of stretching to the sidebar's height */
   align-self: start;
-  padding: 12px 12px 16px;
   position: relative;
 }
 
 .sideStack {
   display: grid;
-  gap: 14px;
+  gap: 26px;
+  /* Hero, rows, socials and footer all share this one measure. */
+  width: 100%;
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* Identity rail: photo, name, degree - then quiet metadata rows. */
+.sideHero {
+  text-align: center;
+  padding: 6px var(--railPad) 0;
+}
+
+.sideDegree {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+.railRows {
+  display: grid;
+  /* Held to the width of the name above them. */
+  max-width: 210px;
+  margin-inline: auto;
+}
+
+.railRow {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 15px var(--railPad);
+  border-top: 1px solid var(--line);
+}
+
+.railIcon {
+  display: block;
+  margin-top: 1px;
+  color: var(--accent);
+}
+
+.railIcon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 .sideTile {
   position: relative;
@@ -328,10 +373,7 @@ html.theme-crossfade body::before {
   position: relative;
 }
 
-.sideHero {
-  text-align: center;
-  padding: 18px 14px 16px;
-}
+
 .avatar {
   width: 62px;
   height: 62px;
@@ -354,13 +396,15 @@ html.theme-crossfade body::before {
   width: 120px;
   height: 120px;
   border-radius: 28px;
-  margin: 0 auto 14px;
+  margin: 0 auto 18px;
 }
 .sideName {
   margin: 0;
-  font-size: 31px;
-  font-weight: 500;
-  letter-spacing: -0.032em;
+  font-family: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: -0.004em;
+  line-height: 1.15;
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -478,13 +522,73 @@ html.theme-crossfade body::before {
   box-shadow: var(--ring);
 }
 
-.top {
+.pageNav {
+  position: sticky;
+  top: 0;
+  z-index: 12;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 10px 12px;
-  border-bottom: 1px solid var(--line);
+  gap: 16px;
+  margin: 0 -14px 34px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 0 0 16px 16px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+/* Only once it lifts off the top does it need to hide what passes beneath. */
+.pageNav.is-stuck {
+  background: var(--bg0);
+  background: color-mix(in srgb, var(--bg0) 97%, transparent);
+  backdrop-filter: blur(18px) saturate(1.05);
+  -webkit-backdrop-filter: blur(18px) saturate(1.05);
+}
+
+/* Light mode needs an edge - the panel is light against a light page.
+   The border is reserved at rest so sticking never changes the height. */
+:root.light .pageNav {
+  border: 1px solid transparent;
+}
+
+:root.light .pageNav.is-stuck {
+  border-color: var(--line);
+}
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.navLink {
+  position: relative;
+  padding: 4px 0 7px;
+  color: var(--faint);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.navLink:hover {
+  color: var(--muted);
+}
+.navLink.is-active {
+  color: var(--text);
+}
+.navLink.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.navLink:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
 }
 .tabs {
   position: relative;
@@ -691,13 +795,50 @@ html.theme-crossfade body::before {
 }
 
 .pane {
-  display: none;
+  display: block;
   width: 100%;
-  padding: 16px 14px 4px;
+  padding: 0;
+  scroll-margin-top: 82px;
+}
+/* Section spacing now lives on the sections themselves. */
+.pane + .pane {
+  margin-top: 84px;
 }
 
-.pane.is-active {
-  display: block;
+/* "Projects ------------" - the rule rides beside the heading and reveals
+   with it, so it belongs to the section rather than the gap above it. */
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.sectionHead .h2 {
+  margin: 2px 0 10px;
+  flex: 0 0 auto;
+}
+
+.sectionHeadRule {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 1px;
+  margin-bottom: 12px;
+  background: var(--line);
+}
+/* Sections settle in as they scroll into view; their headers land first. */
+html.js .pane {
+  opacity: 0;
+  transform: translateY(14px);
+}
+html.js .pane.is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pane.is-revealing {
   animation: paneIn 650ms ease both;
 }
 
@@ -713,6 +854,15 @@ html.theme-crossfade body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js .pane {
+    opacity: 1;
+    transform: none;
+  }
+
   .pane.is-active {
     animation: none;
   }
@@ -2123,6 +2273,42 @@ html.loaded .sideTile:nth-child(4) {
   animation-delay: 240ms;
 }
 
+html.preload .sideHero,
+html.preload .railRow {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+html.loaded .sideHero,
+html.loaded .railRow {
+  animation: bootIn 900ms ease both;
+}
+
+html.loaded .railRow:nth-child(1) {
+  animation-delay: 90ms;
+}
+
+html.loaded .railRow:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+html.loaded .railRow:nth-child(3) {
+  animation-delay: 210ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.preload .sideHero,
+  html.preload .railRow {
+    opacity: 1;
+    transform: none;
+  }
+
+  html.loaded .sideHero,
+  html.loaded .railRow {
+    animation: none;
+  }
+}
+
 /* Stagger outer bits slightly */
 html.loaded .card.side {
   animation-delay: 80ms;
@@ -2755,7 +2941,7 @@ html.loaded .card.main {
 }
 
 .about-me-content .lead {
-  max-width: 44ch;
+  max-width: 54ch;
 }
 
 .siteFooter {
@@ -2764,8 +2950,7 @@ html.loaded .card.main {
   align-items: center;
   width: 100%;
   margin: 2px 0 0;
-  padding: 12px 14px 0;
-  border-top: 1px solid var(--line);
+  padding: 10px var(--railPad) 0;
   color: var(--faint);
   font-size: 11px;
   line-height: 1.4;
@@ -2955,9 +3140,8 @@ html.loaded .card.main {
     padding: 0 10px;
   }
 
-  .side,
-  .main {
-    padding: 10px;
+  .side {
+    padding: 0;
   }
 
   .sideTile {
@@ -2965,8 +3149,12 @@ html.loaded .card.main {
     border-radius: 18px;
   }
 
+  .side {
+    --railPad: 2px;
+  }
+
   .sideHero {
-    padding: 14px 10px 14px;
+    padding: 4px var(--railPad) 0;
   }
 
   .avatarLarge {
@@ -2976,33 +3164,32 @@ html.loaded .card.main {
   }
 
   .sideName {
-    font-size: 27px;
+    font-size: 30px;
   }
 
-  .sideRole {
-    max-width: 100%;
-    white-space: normal;
-    text-align: center;
+  .sideDegree {
+    font-size: 12px;
   }
 
-  .contactTile {
+  .railRow {
     gap: 10px;
-    padding: 10px;
+    padding: 13px var(--railPad);
   }
 
-  .cIcon {
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
+  .railIcon svg {
+    width: 15px;
+    height: 15px;
   }
 
   .cV {
     font-size: 13px;
   }
 
-  .top {
-    gap: 8px;
-    padding: 9px 9px 11px;
+  .pageNav {
+    gap: 10px;
+    margin: 0 -8px 24px;
+    padding: 12px 12px;
+    border-radius: 0 0 14px 14px;
   }
 
   .tabs {
@@ -3063,7 +3250,7 @@ html.loaded .card.main {
 
   .shell {
     grid-template-columns: 420px minmax(0, 1fr);
-    gap: 22px;
+    gap: 54px;
     margin: 36px auto;
     padding: 0 22px;
   }
@@ -3080,12 +3267,20 @@ html.loaded .card.main {
     display: none;
   }
 
-  .main {
-    padding: 16px 16px 20px;
+  .pane + .pane {
+    margin-top: 90px;
+  }
+
+  .sectionHead {
+    gap: 26px;
+  }
+
+  .sectionHeadRule {
+    margin-bottom: 15px;
   }
 
   .sideStack {
-    gap: 18px;
+    gap: 32px;
   }
 
   .sideTile {
@@ -3093,8 +3288,12 @@ html.loaded .card.main {
     padding: 18px;
   }
 
+  .side {
+    --railPad: 6px;
+  }
+
   .sideHero {
-    padding: 22px 18px 20px;
+    padding: 10px var(--railPad) 0;
   }
 
   .avatar.avatarLarge {
@@ -3105,24 +3304,25 @@ html.loaded .card.main {
   }
 
   .sideName {
-    font-size: 38px;
+    font-size: 42px;
   }
 
-  .sideRole {
-    padding: 9px 18px;
+  .sideDegree {
     font-size: 14px;
   }
 
-  .contactTile {
-    gap: 14px;
-    padding: 15px;
-    border-radius: 18px;
+  .railRows {
+    max-width: 216px;
   }
 
-  .cIcon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
+  .railRow {
+    gap: 14px;
+    padding: 18px var(--railPad);
+  }
+
+  .railIcon svg {
+    width: 17px;
+    height: 17px;
   }
 
   .cK {
@@ -3130,7 +3330,11 @@ html.loaded .card.main {
   }
 
   .cV {
-    font-size: 16px;
+    font-size: 14px;
+  }
+
+  .statusText {
+    font-size: 15px;
   }
 
   .socialBtn svg {
@@ -3138,8 +3342,18 @@ html.loaded .card.main {
     height: 21px;
   }
 
-  .top {
-    padding: 14px 14px 16px;
+  .pageNav {
+    margin: 0 -18px 40px;
+    padding: 16px 20px;
+    border-radius: 0 0 18px 18px;
+  }
+
+  .navLink {
+    font-size: 15px;
+  }
+
+  .pane {
+    scroll-margin-top: 92px;
   }
 
   .tabs {
@@ -3163,8 +3377,17 @@ html.loaded .card.main {
     height: 15px;
   }
 
-  .pane {
-    padding: 24px 18px 8px;
+  .side {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .side::-webkit-scrollbar {
+    display: none;
   }
 
   .h2 {
