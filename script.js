@@ -48,6 +48,7 @@
   const modalText = document.getElementById("modalProjectText");
   const modalTags = document.getElementById("modalProjectTags");
   let lastFocusedElement = null;
+  let scrollLockOffset = 0;
   const blurredImageCache = new Map();
   let modalImageRequestId = 0;
 
@@ -1924,6 +1925,25 @@
     }
   }
 
+  /* html carries overflow-x: clip, so body's overflow never reaches the
+     viewport - the page has to be pinned in place instead. */
+  function lockPageScroll() {
+    scrollLockOffset = window.scrollY;
+    const scrollbarGap = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.setProperty("--scrollLockY", `-${scrollLockOffset}px`);
+    document.body.style.setProperty("--scrollLockGap", `${scrollbarGap}px`);
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
+  }
+
+  function unlockPageScroll() {
+    document.documentElement.classList.remove("modal-open");
+    document.body.classList.remove("modal-open");
+    document.body.style.removeProperty("--scrollLockY");
+    document.body.style.removeProperty("--scrollLockGap");
+    window.scrollTo(0, scrollLockOffset);
+  }
+
   function openProjectModal(project) {
     if (!projectModal || !modalCard) return;
     const requestId = ++modalImageRequestId;
@@ -1962,7 +1982,7 @@
     projectModal.setAttribute("aria-hidden", "false");
     projectModal.removeAttribute("inert");
     pageShell?.setAttribute("inert", "");
-    document.body.classList.add("modal-open");
+    lockPageScroll();
     modalCard.focus();
 
     preloadImage(image)
@@ -1991,8 +2011,8 @@
     projectModal.setAttribute("aria-hidden", "true");
     projectModal.setAttribute("inert", "");
     pageShell?.removeAttribute("inert");
-    document.body.classList.remove("modal-open");
-    lastFocusedElement?.focus();
+    unlockPageScroll();
+    lastFocusedElement?.focus({ preventScroll: true });
   }
 
   projects.forEach((project) => {

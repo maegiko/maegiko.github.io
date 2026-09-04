@@ -1696,8 +1696,17 @@ html.theme-crossfade body::before {
   margin-top: 0;
 }
 
+html.modal-open,
 body.modal-open {
   overflow: hidden;
+}
+body.modal-open {
+  position: fixed;
+  top: var(--scrollLockY, 0px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding-right: var(--scrollLockGap, 0px);
 }
 
 .form {
