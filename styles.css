@@ -1605,6 +1605,10 @@ html.theme-crossfade body::before {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.85);
+}
+:root.light .projTitle {
+  color: rgba(20, 20, 22, 0.85);
 }
 .projMeta {
   color: var(--faint);
