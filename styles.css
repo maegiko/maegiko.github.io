@@ -3135,6 +3135,44 @@ html.loaded .card.main {
     animation: none;
   }
 
+  /* Stacked at this width the rail is not a sidebar any more - it is a band
+     across the top of the page - so the measures that sized it as one come off
+     and its rows run to the canvas gutters, squaring their rules up with the
+     nav and the sections below. The centring margins go too: an auto inline
+     margin keeps a grid item from stretching, so the rows would sit at their
+     content width without it. The hero still centres itself - the avatar's own
+     auto margins and the centred text - so it stays put as the rules widen. */
+  .sideStack,
+  .railRows {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  /* Vertical rhythm for the stacked rail. The grid gap is uniform, so the
+     socials would keep the hero's breathing room and end up floating between
+     the location rule and the nav - the row gap comes down for them and the
+     rows take their own margin to hold the hero's spacing where it was. */
+  .sideStack {
+    row-gap: 14px;
+  }
+
+  .railRows {
+    margin-top: 12px;
+  }
+
+  /* Stacked, this gap is the seam between the rail and the page rather than
+     the gutter between two columns, and the nav's own padding already reads as
+     space - so it tightens to leave a clear break, not a dead zone. */
+  .shell {
+    row-gap: 20px;
+  }
+
+  /* Matched to the gap above it, so the nav sits between the two blocks
+     instead of drifting toward the rail. */
+  .pageNav {
+    margin-bottom: 26px;
+  }
+
   .about-me-content {
     align-items: stretch;
     flex-direction: column;
